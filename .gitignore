@@ -1,0 +1,100 @@
+# -----------------------------
+# Package managers / dependencies
+# -----------------------------
+/node_modules
+/.pnp
+.pnp.*
+# Yarn v2+ (Berry)
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.pnpm-store
+
+# Lockfiles (keep committed for reproducible installs)
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
+# bun.lockb
+
+# -----------------------------
+# Build output / caches
+# -----------------------------
+/.next/
+/.next/cache/
+/out/
+/build
+/dist
+.turbo
+.cache
+
+# -----------------------------
+# Testing / coverage
+# -----------------------------
+/coverage
+.nyc_output
+playwright-report
+playwright/.cache
+/test-results
+
+# -----------------------------
+# Logs & debug
+# -----------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# -----------------------------
+# Environment files
+# -----------------------------
+.env*
+!.env.example
+
+# -----------------------------
+# Platforms / OS files
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# Certificates/keys
+# -----------------------------
+*.pem
+*.key
+
+# -----------------------------
+# Editors / IDEs
+# -----------------------------
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# JetBrains (WebStorm/IntelliJ)
+.idea/
+*.iml
+
+# Vim / others
+*.swp
+*.swo
+
+#
+.ai
+
+# -----------------------------
+# Vercel / deployment
+# -----------------------------
+.vercel
+
+# -----------------------------
+# TypeScript
+# -----------------------------
+*.tsbuildinfo
+next-env.d.ts
