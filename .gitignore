@@ -52,7 +52,7 @@ lerna-debug.log*
 # -----------------------------
 # Environment files
 # -----------------------------
-.env*
+.env
 !.env.example
 
 # -----------------------------
@@ -98,3 +98,5 @@ Thumbs.db
 # -----------------------------
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
