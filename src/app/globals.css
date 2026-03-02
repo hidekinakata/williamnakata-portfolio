@@ -78,16 +78,6 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-body {
-  @apply bg-plantation-50 text-berwickberry-950 relative min-h-screen overflow-x-hidden;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    @apply bg-berwickberry-950 text-plantation-50;
-  }
-}
-
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -157,9 +147,49 @@ body {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+
+
+
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 transition-colors duration-200;
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE and Edge */
+  }
+
+  *::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera */
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  html {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  html::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  body {
+    @apply bg-plantation-100 text-berwickberry-900 relative min-h-screen overflow-x-hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  .dark body {
+    @apply bg-berwickberry-900 text-plantation-100 ;
   }
 }
-
