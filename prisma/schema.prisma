@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/prismaClient"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Profile {
+  id           String               @id @default(cuid())
+  name         String
+  email        String?
+  github       String?
+  linkedin     String?
+  instagram    String?
+  updatedAt    DateTime             @updatedAt
+  translations ProfileTranslation[]
+}
+
+model ProfileTranslation {
+  id        String  @id @default(cuid())
+  profileId String
+  language  String // 'pt-BR' ou 'en'
+  bio       String? @db.Text
+  cvUrl     String?
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, language])
+}
+
+model Experience {
+  id           String                  @id @default(cuid())
+  company      String
+  startDate    DateTime
+  endDate      DateTime?
+  current      Boolean                 @default(false)
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  translations ExperienceTranslation[]
+}
+
+model ExperienceTranslation {
+  id           String     @id @default(cuid())
+  experienceId String
+  language     String // 'pt-BR' ou 'en'
+  position     String
+  description  String?    @db.Text
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+
+  @@unique([experienceId, language])
+}
+
+model Project {
+  id           String               @id @default(cuid())
+  imageUrl     String?
+  link         String?
+  github       String?
+  tags         String[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  translations ProjectTranslation[]
+}
+
+model ProjectTranslation {
+  id          String  @id @default(cuid())
+  projectId   String
+  language    String // 'pt-BR' ou 'en'
+  title       String
+  description String? @db.Text
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, language])
+}
+
+model Post {
+  id           String            @id @default(cuid())
+  slug         String            @unique
+  published    Boolean           @default(false)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  translations PostTranslation[]
+}
+
+model PostTranslation {
+  id       String @id @default(cuid())
+  postId   String
+  language String // 'pt-BR' ou 'en'
+  title    String
+  content  String @db.Text
+  post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, language])
+}
