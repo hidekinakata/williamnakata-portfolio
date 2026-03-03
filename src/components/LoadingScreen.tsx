@@ -1,15 +1,14 @@
 "use client";
 
 import {
-  motion,
-  AnimatePresence,
-  Transition,
-  useMotionValue,
-  useTransform,
   animate,
-  Variants, stagger,
+  AnimatePresence,
+  motion,
+  stagger,
+  Transition,
+  Variants,
 } from "framer-motion";
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLoading } from "@/context/LoadingContext";
 
 // Variants do container principal
@@ -27,7 +26,11 @@ const containerVariants: Variants = {
       delayChildren: stagger(0.1),
     },
   },
-  exit: { scale: 0.95, opacity: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  exit: {
+    scale: 0.95,
+    opacity: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 // Variant para o SVG (entra de baixo com fade)
@@ -36,7 +39,7 @@ const svgVariants: Variants = {
   visible: {
     scale: 1,
     opacity: 1,
-    transition: { duration: 0.2, ease: "easeInOut"},
+    transition: { duration: 0.2, ease: "easeInOut" },
   },
 };
 
@@ -62,7 +65,7 @@ const GAP = PATH_LENGTH - DOT_SIZE;
 
 const trailTransition: Transition = {
   strokeDashoffset: {
-    duration: 2.5,
+    duration: 1.0,
     ease: "linear",
     repeat: Infinity,
   },
@@ -107,15 +110,27 @@ export const LoadingScreen = () => {
           animate="visible"
           exit="exit"
         >
-          <div className={"relative flex-1 w-full bg-neutral-950/50 rounded-xl"}>
+          <div
+            className={"relative flex-1 w-full bg-neutral-950/50 rounded-xl"}
+          >
             <motion.span className="absolute top-0 left-0 w-6 h-6 border-l border-t border-white/25" />
             <motion.span className="absolute top-0 right-0 w-6 h-6 border-r border-t border-white/25" />
             <motion.span className="absolute bottom-0 right-0 w-6 h-6 border-r border-b border-white/25" />
             <motion.span className="absolute bottom-0 left-0 w-6 h-6 border-l border-b border-white/25" />
 
-            <span className={"absolute top-3 right-6 font-mono text-xs text text-neutral-400"}>EST. 2026</span>
+            <span
+              className={
+                "absolute top-3 right-6 font-mono text-xs text text-neutral-400"
+              }
+            >
+              EST. 2026
+            </span>
 
-            <div className={"absolute w-full top-3/7 left-1/2 -translate-1/2 flex flex-col items-center justify-center "}>
+            <div
+              className={
+                "absolute w-full top-3/7 left-1/2 -translate-1/2 flex flex-col items-center justify-center "
+              }
+            >
               <motion.svg
                 width="255"
                 height="255"
@@ -219,7 +234,9 @@ export const LoadingScreen = () => {
                 />
               </motion.svg>
               <motion.h1
-                className={"text-xl lg:text-3xl text-center font-sans-decorated mt-8"}
+                className={
+                  "text-xl lg:text-3xl text-center font-sans-decorated mt-8"
+                }
                 variants={titleVariants}
               >
                 William Nakata
@@ -230,11 +247,12 @@ export const LoadingScreen = () => {
               className={
                 "absolute bottom-16 left-1/2 -translate-x-1/2 h-fit font-mono font-thin text-neutral-400 w-full md:w-1/3 lg:w-72 "
               }
-
             >
               <div className={"w-full flex justify-between items-center"}>
                 <span className="text-sm  lg:text-base">Loading...</span>
-                <span className={"text-berwickberry-500"}>{progress.toFixed(2)} %</span>
+                <span className={"text-berwickberry-500"}>
+                  {progress.toFixed(2)} %
+                </span>
               </div>
               <div className={"block relative w-full h-2"}>
                 <span
