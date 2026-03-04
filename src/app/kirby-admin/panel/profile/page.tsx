@@ -382,9 +382,8 @@ export default function ProfilePage() {
                           ) : (
                             <FileUp className="mr-2 h-4 w-4" />
                           )}
-                          {profile.translations.find(
-                            (t) => t.language === "en",
-                          )?.cvUrl
+                          {profile.translations.find((t) => t.language === "en")
+                            ?.cvUrl
                             ? "Replace PDF"
                             : "Upload PDF (EN)"}
                         </Button>
