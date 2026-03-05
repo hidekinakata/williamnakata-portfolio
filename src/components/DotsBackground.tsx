@@ -131,14 +131,14 @@ export default function DotsBackground() {
           className="text-neutral-950/5 dark:text-plantation-50/5 antialiased"
           initial={{ pathLength: 0, opacity: 0.2 }}
           animate={{ pathLength: 0.06, opacity: 1 }}
-          transition={{ duration: 2, ease: 'easeInOut'}}
+          transition={{ duration: 2, ease: "easeInOut" }}
         />
       </svg>
       <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10"
-    />
+        ref={canvasRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 -z-10"
+      />
     </>
   );
 }
