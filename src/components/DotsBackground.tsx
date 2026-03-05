@@ -24,60 +24,77 @@ export default function DotsBackground() {
   const opacitiesRef = useRef<Float32Array | null>(null);
   const gridSizeRef = useRef({ cols: 0, rows: 0 });
 
-  const draw = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  const drawRef = useRef<FrameRequestCallback | null>(null);
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  useEffect(() => {
+    const draw = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const w = canvas.width / dpr;
-    const h = canvas.height / dpr;
-    const { x: mx, y: my } = mouseRef.current;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+      const { x: mx, y: my } = mouseRef.current;
 
-    const isDark = document.documentElement.classList.contains("dark");
-    const dotColor = isDark ? "255,255,255" : "0,0,0";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const cols = Math.ceil(w / DOT_SPACING) + 1;
-    const rows = Math.ceil(h / DOT_SPACING) + 1;
-    const total = cols * rows;
+      const isDark = document.documentElement.classList.contains("dark");
+      const dotColor = isDark ? "255,255,255" : "0,0,0";
 
-    // Recria o array se o grid mudou de tamanho (resize)
-    if (
-      gridSizeRef.current.cols !== cols ||
-      gridSizeRef.current.rows !== rows
-    ) {
-      opacitiesRef.current = new Float32Array(total).fill(MIN_OPACITY);
-      gridSizeRef.current = { cols, rows };
-    }
+      const cols = Math.ceil(w / DOT_SPACING) + 1;
+      const rows = Math.ceil(h / DOT_SPACING) + 1;
+      const total = cols * rows;
 
-    const opacities = opacitiesRef.current!;
-
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        const i = row * cols + col;
-        const x = col * DOT_SPACING;
-        const y = row * DOT_SPACING;
-
-        // Opacidade alvo baseada na distância ao mouse
-        const dist = Math.hypot(x - mx, y - my);
-        const t = Math.max(0, 1 - dist / MOUSE_RADIUS);
-        const target = MIN_OPACITY + t * (MAX_OPACITY - MIN_OPACITY);
-
-        // Interpola suavemente a opacidade atual → alvo
-        opacities[i] = lerp(opacities[i], target, LERP_SPEED);
-
-        ctx.beginPath();
-        ctx.arc(x + 0.1*target*(x - mx), y + 0.1*target*(y - my), DOT_RADIUS * (1+target*6), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${dotColor},${opacities[i]})`;
-        ctx.fill();
+      // Recria o array se o grid mudou de tamanho (resize)
+      if (
+        gridSizeRef.current.cols !== cols ||
+        gridSizeRef.current.rows !== rows
+      ) {
+        opacitiesRef.current = new Float32Array(total).fill(MIN_OPACITY);
+        gridSizeRef.current = { cols, rows };
       }
-    }
 
+      const opacities = opacitiesRef.current!;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const i = row * cols + col;
+          const x = col * DOT_SPACING;
+          const y = row * DOT_SPACING;
+
+          // Opacidade alvo baseada na distância ao mouse
+          const dist = Math.hypot(x - mx, y - my);
+          const t = Math.max(0, 1 - dist / MOUSE_RADIUS);
+          const target = MIN_OPACITY + t * (MAX_OPACITY - MIN_OPACITY);
+
+          // Interpola suavemente a opacidade atual → alvo
+          opacities[i] = lerp(opacities[i], target, LERP_SPEED);
+
+          ctx.beginPath();
+          ctx.arc(
+            x + 0.1 * target * (x - mx),
+            y + 0.1 * target * (y - my),
+            DOT_RADIUS * (1 + target * 6),
+            0,
+            Math.PI * 2,
+          );
+          ctx.fillStyle = `rgba(${dotColor},${opacities[i]})`;
+          ctx.fill();
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(drawRef.current!);
+    };
+
+    drawRef.current = draw;
     rafRef.current = requestAnimationFrame(draw);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -106,7 +123,7 @@ export default function DotsBackground() {
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseleave", handleMouseLeave);
 
-    rafRef.current = requestAnimationFrame(draw);
+    rafRef.current = requestAnimationFrame(drawRef.current!);
 
     return () => {
       window.removeEventListener("resize", resize);
@@ -114,7 +131,7 @@ export default function DotsBackground() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [draw]);
+  }, [drawRef]);
 
   return (
     <>
