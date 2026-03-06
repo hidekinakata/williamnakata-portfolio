@@ -1,8 +1,25 @@
-import { type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/proxy'
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+import { type NextRequest } from "next/server";
+import { updateSession } from "@/lib/supabase/proxy";
+
+const intlMiddleware = createMiddleware(routing);
 
 export async function proxy(request: NextRequest) {
-  return await updateSession(request)
+  const supabaseResponse = await updateSession(request);
+
+  if (request.nextUrl.pathname.startsWith("/kirby-admin")) {
+    return supabaseResponse;
+  }
+
+  const response = intlMiddleware(request);
+
+  // Transfer cookies from supabaseResponse to intl response
+  supabaseResponse.cookies.getAll().forEach((cookie) => {
+    response.cookies.set(cookie.name, cookie.value);
+  });
+
+  return response;
 }
 
 export const config = {
@@ -14,6 +31,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-}
+};
