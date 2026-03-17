@@ -71,6 +71,7 @@ Thumbs.db
 # Editors / IDEs
 # -----------------------------
 # VS Code
+.vscode
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -87,6 +88,7 @@ Thumbs.db
 
 #
 .ai
+.claude
 
 # -----------------------------
 # Vercel / deployment
@@ -100,3 +102,4 @@ Thumbs.db
 next-env.d.ts
 
 /src/generated/prisma
+
