@@ -5,6 +5,18 @@
     "Experience": "Experiência",
     "Projects": "Projetos",
     "Contact": "Contato",
-    "Blog": "Blog"
+    "Blog": "Artigos"
+  },
+  "Hero": {
+    "badge": "Portfólio",
+    "role1Label": "Função 01",
+    "role1Title": "Dev Fullstack",
+    "role2Label": "Função 02",
+    "role2Title": "Eng. de IA",
+    "baseLabel": "Local",
+    "baseLocation": "São Paulo, BR",
+    "description": "Construindo sistemas inteligentes e escaláveis que conectam IA de ponta às necessidades reais de produto.",
+    "ctaPrimary": "Entre em contato",
+    "ctaSecondary": "Ver meu trabalho"
   }
 }

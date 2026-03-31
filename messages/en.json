@@ -5,6 +5,18 @@
     "Experience": "Experience",
     "Projects": "Projects",
     "Contact": "Contact",
-    "Blog": "Blog"
+    "Blog": "Articles"
+  },
+  "Hero": {
+    "badge": "Portfolio",
+    "role1Label": "Role 01",
+    "role1Title": "Fullstack Dev",
+    "role2Label": "Role 02",
+    "role2Title": "AI Engineer",
+    "baseLabel": "Base",
+    "baseLocation": "São Paulo, BR",
+    "description": "Building intelligent, scalable systems that bridge the gap between cutting-edge AI and real-world product needs.",
+    "ctaPrimary": "Contact me",
+    "ctaSecondary": "View my work"
   }
 }
