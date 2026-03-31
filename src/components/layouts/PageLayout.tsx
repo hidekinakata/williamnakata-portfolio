@@ -6,8 +6,8 @@ type pageLayoutProps = {
 };
 
 const PageLayout = ({ children }: pageLayoutProps) => (
-  <div className="min-h-dvh w-full flex flex-col items-center justify-center">
-    <div className="flex-1">{children}</div>
+  <div className="min-h-dvh w-full flex flex-col">
+    <main className="flex-1 w-full">{children}</main>
     <Footer />
   </div>
 );
