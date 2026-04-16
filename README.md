@@ -10,7 +10,7 @@ O projeto foi construído utilizando as seguintes tecnologias:
 - **Estilização:** [Tailwind CSS 4](https://tailwindcss.com/)
 - **Componentes UI:** [shadcn/ui](https://ui.shadcn.com/) (Personalizados)
 - **Banco de Dados & Backend:** [Supabase](https://supabase.com/) (PostgreSQL)
-- **Animações:** [Framer Motion](https://www.framer.com/motion/)
+- **Animações:** [Framer Motion](https://www.framer.com/motion/), [OGL](https://ogl.dev/) e [GSAP](https://gsap.com/)
 - **Ícones:** [Lucide React](https://lucide.dev/)
 - **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
 
@@ -25,6 +25,7 @@ O projeto foi construído utilizando as seguintes tecnologias:
 ## 🛠️ Estrutura do Banco de Dados
 
 O projeto utiliza uma estrutura robusta no PostgreSQL para suportar a internacionalização de conteúdos, incluindo tabelas para:
+
 - `profile` & `profile_translations`
 - `experience` & `experience_translations`
 - `projects` & `project_translations`
@@ -41,11 +42,13 @@ O projeto utiliza uma estrutura robusta no PostgreSQL para suportar a internacio
 ### Instalação
 
 1. Clone o repositório:
+
    ```bash
    git clone https://github.com/seu-usuario/williamnakata-portfolio.git
    ```
 
 2. Instale as dependências:
+
    ```bash
    yarn install
    # ou
@@ -54,6 +57,7 @@ O projeto utiliza uma estrutura robusta no PostgreSQL para suportar a internacio
 
 3. Configure as variáveis de ambiente:
    Crie um arquivo `.env.local` na raiz do projeto com suas credenciais do Supabase:
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=sua_url_do_supabase
    NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
