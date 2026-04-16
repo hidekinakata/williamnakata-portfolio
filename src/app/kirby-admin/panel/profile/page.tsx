@@ -25,10 +25,7 @@ import {
 } from "@/components/ui/card";
 import { getProfile, updateProfile, uploadCV } from "./actions";
 import { FileText, FileUp, Loader2 } from "lucide-react";
-import type {
-  ProfileModel,
-  ProfileTranslationModel,
-} from "@/prismaClient/models";
+import type { ProfileModel, ProfileTranslationModel } from "@db/models";
 
 type ProfileWithTranslations = ProfileModel & {
   translations: ProfileTranslationModel[];
@@ -152,7 +149,7 @@ export default function ProfilePage() {
         </Breadcrumb>
       </header>
 
-      <div className="p-6 max-w-4xl mx-auto w-full">
+      <div className="mx-auto w-full max-w-4xl p-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Editar Perfil</h1>
           <p className="text-muted-foreground">
@@ -169,7 +166,7 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">Nome</Label>
                   <Input
@@ -190,7 +187,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="github">GitHub URL</Label>
                   <Input
@@ -209,7 +206,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="Instagram">Instagram URL</Label>
                   <Input
@@ -258,8 +255,8 @@ export default function ProfilePage() {
                     <div className="flex flex-col gap-3">
                       {profile?.translations.find((t) => t.language === "pt-BR")
                         ?.cvUrl && (
-                        <div className="flex items-center gap-2 p-2 bg-muted rounded-md text-sm">
-                          <FileText className="h-4 w-4 text-primary" />
+                        <div className="bg-muted flex items-center gap-2 rounded-md p-2 text-sm">
+                          <FileText className="text-primary h-4 w-4" />
                           <span className="flex-1 truncate">
                             {
                               profile.translations.find(
@@ -336,8 +333,8 @@ export default function ProfilePage() {
                     <div className="flex flex-col gap-3">
                       {profile?.translations.find((t) => t.language === "en")
                         ?.cvUrl && (
-                        <div className="flex items-center gap-2 p-2 bg-muted rounded-md text-sm">
-                          <FileText className="h-4 w-4 text-primary" />
+                        <div className="bg-muted flex items-center gap-2 rounded-md p-2 text-sm">
+                          <FileText className="text-primary h-4 w-4" />
                           <span className="flex-1 truncate">
                             {
                               profile.translations.find(
@@ -397,10 +394,10 @@ export default function ProfilePage() {
 
           {message && (
             <div
-              className={`p-4 rounded-md ${
+              className={`rounded-md p-4 ${
                 message.type === "success"
-                  ? "bg-green-100 text-green-900 border border-green-200"
-                  : "bg-red-100 text-red-900 border border-red-200"
+                  ? "border border-green-200 bg-green-100 text-green-900"
+                  : "border border-red-200 bg-red-100 text-red-900"
               }`}
             >
               {message.text}
