@@ -1,15 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import GradualBlur from "@/components/GradualBlur";
+import { useLocale, useTranslations } from "next-intl";
+import GradualBlur from "@/components/effects/GradualBlur";
 import { cn } from "@/lib/utils";
+import { Link, usePathname } from "@/i18n/navigation";
 
 const Navbar = () => {
   const t = useTranslations("Menu");
+  const locale = useLocale();
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const localeOptions = ["pt", "en"] as const;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +40,7 @@ const Navbar = () => {
       className={cn(
         "fixed top-0 left-0 right-0 z-50",
         "grid grid-cols-[1fr_auto_1fr] items-center",
-        "h-20 lg:h-28 px-6 lg:px-12",
+        "h-20 lg:h-28 3xl:h-32 px-6 lg:px-12 3xl:px-20 4xl:px-32",
         "transition-transform duration-300",
         "bg-linear-to-b from-black/50 via-black/10 to-black/0",
         isVisible ? "translate-y-0" : "-translate-y-full",
@@ -66,7 +69,7 @@ const Navbar = () => {
               {item}
               <span
                 className={
-                  "absolute top-1 right-0 -translate-y-full translate-x-full text-[0.51rem] text-violet-500"
+                  "absolute top-1 right-0 -translate-y-full translate-x-full text-3xs text-violet-500"
                 }
               >
                 0{index}
@@ -76,12 +79,11 @@ const Navbar = () => {
         </ul>
       </nav>
 
-      {/* Logo */}
       <h1 className="uppercase flex flex-col items-center *:leading-none col-start-2">
-        <span className="text-base lg:text-xl font-thin text-white/60 mr-2 lg:mr-3">
+        <span className="text-xs lg:text-sm font-thin tracking-[0.08em] text-white/60 mr-1.5 lg:mr-2">
           William
         </span>
-        <span className="text-xl lg:text-3xl font-extrabold text-white">
+        <span className="text-xl lg:text-2xl font-extrabold tracking-tight text-white">
           Nakata
         </span>
       </h1>
@@ -103,14 +105,35 @@ const Navbar = () => {
 
       <div className="hidden lg:block">
         <div className={"flex justify-end items-center gap-2"}>
+          <div className="flex items-center border border-white/20 bg-royal-500/8 p-0.5">
+            {localeOptions.map((option) => {
+              const isActive = locale === option;
+              return (
+                <Link
+                  key={option}
+                  href={pathname}
+                  locale={option}
+                  className={cn(
+                    "flex h-6 w-8 items-center justify-center font-mono text-3xs font-semibold tracking-[0.14em] uppercase transition-colors",
+                    isActive
+                      ? "bg-royal-500 text-white"
+                      : "text-white/55 hover:text-white/85",
+                  )}
+                >
+                  {option}
+                </Link>
+              );
+            })}
+          </div>
+
           <div className="w-fit flex items-center py-2 px-4 gap-2 bg-lime-400/8 border border-solid border-lime-500/50 antialiased text-xs/4">
-            <div className="tracking-[0.2em] uppercase inline-block text-lime-400 font-mono font-medium shrink-0 text-[10px]/3">
+            <div className="tracking-[0.2em] uppercase inline-block text-lime-400 font-mono font-medium shrink-0 text-2xs/3">
               {t("Blog")}
             </div>
           </div>
 
           <div className="w-fit flex items-center py-2 px-4 gap-2 bg-violet-400/10 border border-solid border-violet-500/50 antialiased text-xs/4">
-            <div className="tracking-[0.2em] uppercase inline-block text-violet-400 font-mono font-medium shrink-0 text-[10px]/3">
+            <div className="tracking-[0.2em] uppercase inline-block text-violet-400 font-mono font-medium shrink-0 text-2xs/3">
               Download CV
             </div>
           </div>
