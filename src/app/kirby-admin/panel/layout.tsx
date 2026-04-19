@@ -3,7 +3,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/appSidebar";
+import { AppSidebar } from "@/components/admin/appSidebar";
 import { Separator } from "@/components/ui/separator";
 import {
   Breadcrumb,

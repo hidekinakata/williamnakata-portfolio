@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
-import { LoadingScreen } from "@/components/LoadingScreen";
+import { LoadingScreen } from "@/components/loading/LoadingScreen";
 import { useLoading } from "@/context/LoadingContext";
 
 interface Props {
