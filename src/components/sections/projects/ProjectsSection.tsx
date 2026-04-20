@@ -56,6 +56,7 @@ const accents: ProjectAccent[] = [
 
 type ProjectData = {
   id: string;
+  type: string;
   title: string;
   description: string;
   imageUrl: string;
