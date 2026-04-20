@@ -9,15 +9,18 @@
   },
   "Hero": {
     "badge": "Portfolio",
-    "role1Label": "Role 01",
+    "role1Label": "Main Role",
     "role1Title": "Fullstack Dev",
-    "role2Label": "Role 02",
+    "role2Label": "Specialization",
     "role2Title": "AI Engineer",
-    "baseLabel": "Base",
+    "baseLabel": "Based in",
     "baseLocation": "São Paulo, BR",
     "description": "Building intelligent, scalable systems that bridge the gap between cutting-edge AI and real-world product needs.",
     "ctaPrimary": "Start a project",
-    "ctaSecondary": "View my work"
+    "ctaSecondary": "View my work",
+    "availableForWork": "Available for work",
+    "downloadCV": "Download CV",
+    "coordinates": "23.5505° S · 46.6333° W"
   },
   "About": {
     "label": "02 / About",
@@ -41,6 +44,10 @@
     "heading1": "WORK",
     "heading2": "HISTORY",
     "subtitle": "A timeline of roles where engineering meets intelligence — from embedded firmware to AI-powered platforms.",
+    "current": "Present",
+    "seeMore": "See more",
+    "roleSingular": "role",
+    "rolePlural": "roles",
     "c1Name": "Synapse Labs",
     "c1Location": "Tokyo, JP",
     "c1Date": "2019 - Present",

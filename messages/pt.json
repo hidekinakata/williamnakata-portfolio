@@ -9,15 +9,18 @@
   },
   "Hero": {
     "badge": "Portfólio",
-    "role1Label": "Função 01",
+    "role1Label": "Cargo Principal",
     "role1Title": "Dev Fullstack",
-    "role2Label": "Função 02",
+    "role2Label": "Especialização",
     "role2Title": "Eng. de IA",
-    "baseLabel": "Local",
+    "baseLabel": "Baseado em",
     "baseLocation": "São Paulo, BR",
     "description": "Construindo sistemas inteligentes e escaláveis que conectam IA de ponta às necessidades reais de produto.",
     "ctaPrimary": "Iniciar projeto",
-    "ctaSecondary": "Ver meu trabalho"
+    "ctaSecondary": "Ver meu trabalho",
+    "availableForWork": "Disponível para trabalho",
+    "downloadCV": "Baixar CV",
+    "coordinates": "23.5505° S · 46.6333° O"
   },
   "About": {
     "label": "02 / Sobre",
@@ -41,6 +44,10 @@
     "heading1": "TRAJETÓRIA",
     "heading2": "PROFISSIONAL",
     "subtitle": "Uma linha do tempo onde engenharia encontra inteligência — de firmware embarcado a plataformas com IA.",
+    "current": "Presente",
+    "seeMore": "Ver mais",
+    "roleSingular": "cargo",
+    "rolePlural": "cargos",
     "c1Name": "Synapse Labs",
     "c1Location": "Tóquio, JP",
     "c1Date": "2019 - Presente",
