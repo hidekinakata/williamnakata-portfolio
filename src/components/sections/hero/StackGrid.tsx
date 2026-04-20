@@ -62,7 +62,7 @@ export default function StackGrid() {
                   <path d={card.path} />
                 </svg>
                 <span
-                  className="font-mono text-3xs 3xl:text-xs leading-3.5 tracking-[0.12em] uppercase font-semibold"
+                  className="font-mono text-3xs 3xl:text-sm leading-3.5 tracking-[0.12em] uppercase font-semibold"
                   style={{ color: c }}
                 >
                   {t(card.titleKey)}
@@ -99,7 +99,7 @@ export default function StackGrid() {
       </div>
 
       {/* Summary footer */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         {summaryColors.map((color, i) => (
           <span key={i} className="h-1 w-1 shrink-0" style={{ backgroundColor: color }} />
         ))}

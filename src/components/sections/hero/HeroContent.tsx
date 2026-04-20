@@ -132,7 +132,7 @@ export default function HeroContent() {
         initial="hidden"
         animate="visible"
         variants={fadeInRight}
-        className="w-full xl:w-[480px] 2xl:w-[520px] 3xl:w-[580px] 4xl:w-[640px] justify-self-end shrink-0"
+        className="w-full justify-self-end shrink-0"
       >
         <motion.div initial="hidden" animate="visible" variants={fadeInUp2}>
           <StackGrid />
