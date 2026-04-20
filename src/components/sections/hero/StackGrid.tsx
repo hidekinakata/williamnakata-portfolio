@@ -19,7 +19,8 @@ export default function StackGrid() {
   const t = useTranslations("Stack");
 
   return (
-    <div className="flex w-full flex-col gap-4 3xl:gap-5">
+    <div className="flex w-full flex-col gap-3 sm:gap-4 3xl:gap-5">
+      {/* Header label */}
       <div className="flex items-center gap-2">
         <span className="h-px w-6 bg-royal-500 shrink-0" />
         <span className="h-1 w-1 shrink-0 rotate-45 bg-royal-500" />
@@ -30,13 +31,14 @@ export default function StackGrid() {
         <span className="grow h-px bg-royal-500/27" />
       </div>
 
-      <div className="grid auto-rows-fr grid-cols-2 gap-3 3xl:gap-4">
+      {/* Grid 2 colunas — mobile e desktop */}
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-3 3xl:gap-4">
         {cardData.map((card) => {
           const c = card.color;
           return (
             <div
               key={card.titleKey}
-              className="flex min-h-[132px] flex-col gap-2.5 p-4 2xl:min-h-[144px] 2xl:p-[1.125rem] 3xl:min-h-[156px] 3xl:p-5"
+              className="flex flex-col gap-2 p-3 sm:p-4 2xl:p-[1.125rem] 3xl:p-5 min-h-[108px] sm:min-h-[132px] 2xl:min-h-[144px] 3xl:min-h-[156px]"
               style={{
                 backgroundColor: `${c}08`,
                 borderTop: `1px solid ${c}55`,
@@ -45,27 +47,29 @@ export default function StackGrid() {
                 borderRight: `1px solid ${c}22`,
               }}
             >
-              <div className="flex items-center gap-2">
+              {/* Title row */}
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <svg
-                  width="15" height="15"
+                  width="13" height="13"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke={c}
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="shrink-0"
+                  className="shrink-0 sm:w-[15px] sm:h-[15px]"
                 >
                   <path d={card.path} />
                 </svg>
                 <span
-                  className="font-mono text-2xs 3xl:text-xs leading-3.5 tracking-[0.14em] uppercase font-semibold"
+                  className="font-mono text-3xs 3xl:text-xs leading-3.5 tracking-[0.12em] uppercase font-semibold"
                   style={{ color: c }}
                 >
                   {t(card.titleKey)}
                 </span>
               </div>
 
+              {/* Subtitle */}
               <span
                 className="font-mono text-3xs 3xl:text-2xs tracking-widest leading-relaxed"
                 style={{ color: `${c}73` }}
@@ -73,6 +77,7 @@ export default function StackGrid() {
                 {t(card.subtitleKey)}
               </span>
 
+              {/* Tags */}
               <div className="mt-auto flex flex-wrap gap-1">
                 {(JSON.parse(t(card.tagsKey)) as string[]).map((tag: string) => (
                   <span
@@ -93,12 +98,13 @@ export default function StackGrid() {
         })}
       </div>
 
+      {/* Summary footer */}
       <div className="flex items-center gap-2">
         {summaryColors.map((color, i) => (
           <span key={i} className="h-1 w-1 shrink-0" style={{ backgroundColor: color }} />
         ))}
         <span className="w-6 h-px bg-white/13" />
-        <span className="font-mono text-3xs 3xl:text-2xs leading-3 tracking-[0.15em] uppercase font-medium text-white/92">
+        <span className="font-mono text-3xs 3xl:text-2xs leading-3 tracking-[0.15em] uppercase font-medium text-white/80">
           {t("summary")}
         </span>
       </div>
