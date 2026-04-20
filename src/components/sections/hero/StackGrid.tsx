@@ -62,7 +62,7 @@ export default function StackGrid() {
                   <path d={card.path} />
                 </svg>
                 <span
-                  className="font-mono text-3xs 3xl:text-xs leading-3.5 tracking-[0.12em] uppercase font-semibold"
+                  className="font-mono text-3xs 3xl:text-sm leading-3.5 tracking-[0.12em] uppercase font-semibold"
                   style={{ color: c }}
                 >
                   {t(card.titleKey)}
