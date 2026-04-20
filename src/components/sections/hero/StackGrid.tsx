@@ -99,7 +99,7 @@ export default function StackGrid() {
       </div>
 
       {/* Summary footer */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         {summaryColors.map((color, i) => (
           <span key={i} className="h-1 w-1 shrink-0" style={{ backgroundColor: color }} />
         ))}
