@@ -1,7 +1,8 @@
 import { prisma } from "./prisma";
+import { Language } from "@db/enums";
 
-export function mapLocale(locale: string): string {
-  return locale === "pt" ? "pt-BR" : "en";
+export function mapLocale(locale: string): Language {
+  return locale === "pt" ? Language.pt_BR : Language.en;
 }
 
 export type ExperienceRole = {
@@ -75,23 +76,21 @@ export async function getExperiences(locale: string): Promise<ExperienceGroup[]>
 
 export async function getProjects(locale: string) {
   const language = mapLocale(locale);
-
   const projects = await prisma.project.findMany({
     include: {
-      translations: {
-        where: { language },
-      },
+      translations: { where: { language } },
+      tags: { include: { tag: true } },
     },
     orderBy: { createdAt: "desc" },
   });
-
   return projects.map((proj) => ({
     id: proj.id,
+    type: proj.type,
     title: proj.translations[0]?.title || "",
     description: proj.translations[0]?.description || "",
     imageUrl: proj.imageUrl || "",
     link: proj.link || "",
     github: proj.github || "",
-    tags: proj.tags,
+    tags: proj.tags.map((pt) => pt.tag.name),
   }));
 }

@@ -31,9 +31,19 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ImageUp, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Language, ProjectType } from "@db/enums";
 import {
   getProjects,
+  getTags,
+  upsertTag,
   createProject,
   updateProject,
   deleteProject,
@@ -41,30 +51,34 @@ import {
 } from "./actions";
 
 type Translation = {
-  language: string;
+  language: Language;
   title: string;
   description: string;
 };
 
+type TagOption = { id: string; name: string; slug: string };
+
 type ProjectForm = {
   id?: string;
+  type: ProjectType;
   imageUrl: string;
   link: string;
   github: string;
-  tags: string[];
-  tagInput: string;
+  tagIds: string[];
+  tagSearch: string;
   translations: Translation[];
 };
 
 const emptyForm = (): ProjectForm => ({
+  type: ProjectType.personal,
   imageUrl: "",
   link: "",
   github: "",
-  tags: [],
-  tagInput: "",
+  tagIds: [],
+  tagSearch: "",
   translations: [
-    { language: "pt-BR", title: "", description: "" },
-    { language: "en", title: "", description: "" },
+    { language: Language.pt_BR, title: "", description: "" },
+    { language: Language.en, title: "", description: "" },
   ],
 });
 
@@ -73,12 +87,13 @@ type ProjectRow = Awaited<ReturnType<typeof getProjects>>[number];
 function toForm(proj: ProjectRow): ProjectForm {
   return {
     id: proj.id,
+    type: proj.type,
     imageUrl: proj.imageUrl || "",
     link: proj.link || "",
     github: proj.github || "",
-    tags: proj.tags,
-    tagInput: "",
-    translations: ["pt-BR", "en"].map((lang) => {
+    tagIds: proj.tags.map((pt) => pt.tagId),
+    tagSearch: "",
+    translations: ([Language.pt_BR, Language.en] as Language[]).map((lang) => {
       const t = proj.translations.find((x) => x.language === lang);
       return { language: lang, title: t?.title || "", description: t?.description || "" };
     }),
@@ -87,6 +102,7 @@ function toForm(proj: ProjectRow): ProjectForm {
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<ProjectRow[]>([]);
+  const [allTags, setAllTags] = useState<TagOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -98,7 +114,9 @@ export default function ProjectsPage() {
 
   const load = async () => {
     setLoading(true);
-    setProjects(await getProjects());
+    const [projs, tags] = await Promise.all([getProjects(), getTags()]);
+    setProjects(projs);
+    setAllTags(tags);
     setLoading(false);
   };
 
@@ -125,14 +143,36 @@ export default function ProjectsPage() {
     }));
   };
 
-  const addTag = () => {
-    const tag = form.tagInput.trim();
-    if (!tag || form.tags.includes(tag)) return;
-    setForm((f) => ({ ...f, tags: [...f.tags, tag], tagInput: "" }));
+  const filteredTags = allTags.filter(
+    (t) =>
+      t.name.toLowerCase().includes(form.tagSearch.toLowerCase()) &&
+      !form.tagIds.includes(t.id),
+  );
+
+  const exactMatch = allTags.find(
+    (t) => t.name.toLowerCase() === form.tagSearch.toLowerCase(),
+  );
+
+  const handleAddTag = async (tagId: string) => {
+    setForm((f) => ({ ...f, tagIds: [...f.tagIds, tagId], tagSearch: "" }));
   };
 
-  const removeTag = (tag: string) => {
-    setForm((f) => ({ ...f, tags: f.tags.filter((t) => t !== tag) }));
+  const handleCreateAndAddTag = async () => {
+    const name = form.tagSearch.trim();
+    if (!name) return;
+    const result = await upsertTag(name);
+    if (result.success && result.tag) {
+      setAllTags((prev) => {
+        const exists = prev.find((t) => t.id === result.tag!.id);
+        if (exists) return prev;
+        return [...prev, result.tag!].sort((a, b) => a.name.localeCompare(b.name));
+      });
+      setForm((f) => ({ ...f, tagIds: [...f.tagIds, result.tag!.id], tagSearch: "" }));
+    }
+  };
+
+  const removeTag = (tagId: string) => {
+    setForm((f) => ({ ...f, tagIds: f.tagIds.filter((id) => id !== tagId) }));
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,10 +196,11 @@ export default function ProjectsPage() {
     setMessage(null);
 
     const payload = {
+      type: form.type,
       imageUrl: form.imageUrl,
       link: form.link,
       github: form.github,
-      tags: form.tags,
+      tagIds: form.tagIds,
       translations: form.translations,
     };
 
@@ -232,17 +273,27 @@ export default function ProjectsPage() {
         ) : (
           <div className="space-y-3">
             {projects.map((proj) => {
-              const ptTrans = proj.translations.find((t) => t.language === "pt-BR");
+              const ptTrans = proj.translations.find((t) => t.language === Language.pt_BR);
               return (
                 <Card key={proj.id}>
                   <CardContent className="flex items-center justify-between py-4">
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold">{ptTrans?.title || "—"}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-semibold">{ptTrans?.title || "—"}</p>
+                        <Badge
+                          variant={proj.type === ProjectType.professional ? "default" : "secondary"}
+                          className="text-xs"
+                        >
+                          {proj.type === ProjectType.professional ? "Profissional" : "Pessoal"}
+                        </Badge>
+                      </div>
                       <p className="text-muted-foreground truncate text-sm">{ptTrans?.description || "—"}</p>
                       {proj.tags.length > 0 && (
                         <div className="mt-1.5 flex flex-wrap gap-1">
-                          {proj.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                          {proj.tags.map((pt) => (
+                            <Badge key={pt.tagId} variant="secondary" className="text-xs">
+                              {pt.tag.name}
+                            </Badge>
                           ))}
                         </div>
                       )}
@@ -282,9 +333,25 @@ export default function ProjectsPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Informações Gerais</CardTitle>
-                <CardDescription>Links, imagem e tags do projeto.</CardDescription>
+                <CardDescription>Links, imagem, tipo e tags do projeto.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type">Tipo de Projeto</Label>
+                  <Select
+                    value={form.type}
+                    onValueChange={(v) => setForm((f) => ({ ...f, type: v as ProjectType }))}
+                  >
+                    <SelectTrigger id="type">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={ProjectType.personal}>Pessoal</SelectItem>
+                      <SelectItem value={ProjectType.professional}>Profissional</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="space-y-2">
                   <Label>Imagem</Label>
                   <div className="flex gap-2 items-center">
@@ -337,29 +404,64 @@ export default function ProjectsPage() {
                   <Label>Tags</Label>
                   <div className="flex gap-2">
                     <Input
-                      value={form.tagInput}
-                      onChange={(e) => setForm((f) => ({ ...f, tagInput: e.target.value }))}
-                      onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }}
-                      placeholder="React, Node.js..."
+                      value={form.tagSearch}
+                      onChange={(e) => setForm((f) => ({ ...f, tagSearch: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (exactMatch) {
+                            handleAddTag(exactMatch.id);
+                          } else if (form.tagSearch.trim()) {
+                            handleCreateAndAddTag();
+                          }
+                        }
+                      }}
+                      placeholder="Buscar ou criar tag..."
                     />
-                    <Button type="button" variant="outline" onClick={addTag}>
-                      <Plus className="h-4 w-4" />
-                    </Button>
                   </div>
-                  {form.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {form.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="flex items-center gap-1 pr-1">
-                          {tag}
-                          <button
-                            type="button"
-                            onClick={() => removeTag(tag)}
-                            className="hover:text-destructive ml-1"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </Badge>
+
+                  {form.tagSearch.trim() && (
+                    <div className="border rounded-md mt-1 max-h-40 overflow-y-auto">
+                      {filteredTags.map((tag) => (
+                        <button
+                          key={tag.id}
+                          type="button"
+                          onClick={() => handleAddTag(tag.id)}
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-accent"
+                        >
+                          {tag.name}
+                        </button>
                       ))}
+                      {!exactMatch && (
+                        <button
+                          type="button"
+                          onClick={handleCreateAndAddTag}
+                          className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:bg-accent flex items-center gap-2"
+                        >
+                          <Plus className="h-3 w-3" />
+                          Criar &quot;{form.tagSearch.trim()}&quot;
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {form.tagIds.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {form.tagIds.map((tagId) => {
+                        const tag = allTags.find((t) => t.id === tagId);
+                        return tag ? (
+                          <Badge key={tagId} variant="secondary" className="flex items-center gap-1 pr-1">
+                            {tag.name}
+                            <button
+                              type="button"
+                              onClick={() => removeTag(tagId)}
+                              className="hover:text-destructive ml-1"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ) : null;
+                      })}
                     </div>
                   )}
                 </div>
@@ -372,13 +474,13 @@ export default function ProjectsPage() {
                 <CardDescription>Título e descrição em cada idioma.</CardDescription>
               </CardHeader>
               <CardContent>
-                <Tabs defaultValue="pt-BR">
+                <Tabs defaultValue={Language.pt_BR}>
                   <TabsList className="mb-4">
-                    <TabsTrigger value="pt-BR">Português</TabsTrigger>
-                    <TabsTrigger value="en">English</TabsTrigger>
+                    <TabsTrigger value={Language.pt_BR}>Português</TabsTrigger>
+                    <TabsTrigger value={Language.en}>English</TabsTrigger>
                   </TabsList>
 
-                  {["pt-BR", "en"].map((lang) => {
+                  {([Language.pt_BR, Language.en] as Language[]).map((lang) => {
                     const t = form.translations.find((x) => x.language === lang)!;
                     return (
                       <TabsContent key={lang} value={lang} className="space-y-4">
@@ -387,7 +489,7 @@ export default function ProjectsPage() {
                           <Input
                             value={t.title}
                             onChange={(e) => handleTranslationChange(lang, "title", e.target.value)}
-                            required={lang === "pt-BR"}
+                            required={lang === Language.pt_BR}
                           />
                         </div>
                         <div className="space-y-2">

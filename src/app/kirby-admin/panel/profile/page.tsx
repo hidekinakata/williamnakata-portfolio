@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/card";
 import { getProfile, updateProfile, uploadCV } from "./actions";
 import { FileText, FileUp, Loader2 } from "lucide-react";
+import { Language } from "@db/enums";
 import type { ProfileModel, ProfileTranslationModel } from "@db/models";
 
 type ProfileWithTranslations = ProfileModel & {
@@ -227,13 +228,13 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="pt-BR">
+              <Tabs defaultValue={Language.pt_BR}>
                 <TabsList className="mb-4">
-                  <TabsTrigger value="pt-BR">Português</TabsTrigger>
-                  <TabsTrigger value="en">English</TabsTrigger>
+                  <TabsTrigger value={Language.pt_BR}>Português</TabsTrigger>
+                  <TabsTrigger value={Language.en}>English</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="pt-BR" className="space-y-6">
+                <TabsContent value={Language.pt_BR} className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="bio-pt">Biografia (PT)</Label>
                     <Textarea
@@ -241,11 +242,11 @@ export default function ProfilePage() {
                       rows={6}
                       value={
                         profile?.translations.find(
-                          (t) => t.language === "pt-BR",
+                          (t) => t.language === Language.pt_BR,
                         )?.bio || ""
                       }
                       onChange={(e) =>
-                        handleTranslationChange("pt-BR", "bio", e.target.value)
+                        handleTranslationChange(Language.pt_BR, "bio", e.target.value)
                       }
                     />
                   </div>
@@ -253,14 +254,14 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <Label>Currículo PDF (PT)</Label>
                     <div className="flex flex-col gap-3">
-                      {profile?.translations.find((t) => t.language === "pt-BR")
+                      {profile?.translations.find((t) => t.language === Language.pt_BR)
                         ?.cvUrl && (
                         <div className="bg-muted flex items-center gap-2 rounded-md p-2 text-sm">
                           <FileText className="text-primary h-4 w-4" />
                           <span className="flex-1 truncate">
                             {
                               profile.translations.find(
-                                (t) => t.language === "pt-BR",
+                                (t) => t.language === Language.pt_BR,
                               )?.cvUrl
                             }
                           </span>
@@ -268,7 +269,7 @@ export default function ProfilePage() {
                             <a
                               href={
                                 profile.translations.find(
-                                  (t) => t.language === "pt-BR",
+                                  (t) => t.language === Language.pt_BR,
                                 )?.cvUrl || "#"
                               }
                               target="_blank"
@@ -283,7 +284,7 @@ export default function ProfilePage() {
                         <Input
                           type="file"
                           accept=".pdf"
-                          onChange={(e) => handleFileUpload(e, "pt-BR")}
+                          onChange={(e) => handleFileUpload(e, Language.pt_BR)}
                           className="hidden"
                           id="cv-pt"
                         />
@@ -294,15 +295,15 @@ export default function ProfilePage() {
                           onClick={() =>
                             document.getElementById("cv-pt")?.click()
                           }
-                          disabled={uploading === "pt-BR"}
+                          disabled={uploading === Language.pt_BR}
                         >
-                          {uploading === "pt-BR" ? (
+                          {uploading === Language.pt_BR ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           ) : (
                             <FileUp className="mr-2 h-4 w-4" />
                           )}
                           {profile.translations.find(
-                            (t) => t.language === "pt-BR",
+                            (t) => t.language === Language.pt_BR,
                           )?.cvUrl
                             ? "Substituir PDF"
                             : "Upload PDF (PT)"}
@@ -312,18 +313,18 @@ export default function ProfilePage() {
                   </div>
                 </TabsContent>
 
-                <TabsContent value="en" className="space-y-6">
+                <TabsContent value={Language.en} className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="bio-en">Bio (EN)</Label>
                     <Textarea
                       id="bio-en"
                       rows={6}
                       value={
-                        profile?.translations.find((t) => t.language === "en")
+                        profile?.translations.find((t) => t.language === Language.en)
                           ?.bio || ""
                       }
                       onChange={(e) =>
-                        handleTranslationChange("en", "bio", e.target.value)
+                        handleTranslationChange(Language.en, "bio", e.target.value)
                       }
                     />
                   </div>
@@ -331,14 +332,14 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <Label>Resume PDF (EN)</Label>
                     <div className="flex flex-col gap-3">
-                      {profile?.translations.find((t) => t.language === "en")
+                      {profile?.translations.find((t) => t.language === Language.en)
                         ?.cvUrl && (
                         <div className="bg-muted flex items-center gap-2 rounded-md p-2 text-sm">
                           <FileText className="text-primary h-4 w-4" />
                           <span className="flex-1 truncate">
                             {
                               profile.translations.find(
-                                (t) => t.language === "en",
+                                (t) => t.language === Language.en,
                               )?.cvUrl
                             }
                           </span>
@@ -346,7 +347,7 @@ export default function ProfilePage() {
                             <a
                               href={
                                 profile.translations.find(
-                                  (t) => t.language === "en",
+                                  (t) => t.language === Language.en,
                                 )?.cvUrl || "#"
                               }
                               target="_blank"
@@ -361,7 +362,7 @@ export default function ProfilePage() {
                         <Input
                           type="file"
                           accept=".pdf"
-                          onChange={(e) => handleFileUpload(e, "en")}
+                          onChange={(e) => handleFileUpload(e, Language.en)}
                           className="hidden"
                           id="cv-en"
                         />
@@ -372,14 +373,14 @@ export default function ProfilePage() {
                           onClick={() =>
                             document.getElementById("cv-en")?.click()
                           }
-                          disabled={uploading === "en"}
+                          disabled={uploading === Language.en}
                         >
-                          {uploading === "en" ? (
+                          {uploading === Language.en ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           ) : (
                             <FileUp className="mr-2 h-4 w-4" />
                           )}
-                          {profile.translations.find((t) => t.language === "en")
+                          {profile.translations.find((t) => t.language === Language.en)
                             ?.cvUrl
                             ? "Replace PDF"
                             : "Upload PDF (EN)"}

@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Language } from "@db/enums";
 import {
   getExperiences,
   createExperience,
@@ -40,7 +41,7 @@ import {
 } from "./actions";
 
 type Translation = {
-  language: string;
+  language: Language;
   position: string;
   description: string;
 };
@@ -60,8 +61,8 @@ const emptyForm = (): ExperienceForm => ({
   endDate: "",
   current: false,
   translations: [
-    { language: "pt-BR", position: "", description: "" },
-    { language: "en", position: "", description: "" },
+    { language: Language.pt_BR, position: "", description: "" },
+    { language: Language.en, position: "", description: "" },
   ],
 });
 
@@ -74,7 +75,7 @@ function toForm(exp: ExperienceRow): ExperienceForm {
     startDate: exp.startDate.toISOString().split("T")[0],
     endDate: exp.endDate ? exp.endDate.toISOString().split("T")[0] : "",
     current: exp.current,
-    translations: ["pt-BR", "en"].map((lang) => {
+    translations: ([Language.pt_BR, Language.en] as Language[]).map((lang) => {
       const t = exp.translations.find((x) => x.language === lang);
       return {
         language: lang,
@@ -205,7 +206,7 @@ export default function ExperiencePage() {
         ) : (
           <div className="space-y-3">
             {experiences.map((exp) => {
-              const ptTrans = exp.translations.find((t) => t.language === "pt-BR");
+              const ptTrans = exp.translations.find((t) => t.language === Language.pt_BR);
               return (
                 <Card key={exp.id}>
                   <CardContent className="flex items-center justify-between py-4">
@@ -308,13 +309,13 @@ export default function ExperiencePage() {
                 <CardDescription>Cargo e descrição em cada idioma.</CardDescription>
               </CardHeader>
               <CardContent>
-                <Tabs defaultValue="pt-BR">
+                <Tabs defaultValue={Language.pt_BR}>
                   <TabsList className="mb-4">
-                    <TabsTrigger value="pt-BR">Português</TabsTrigger>
-                    <TabsTrigger value="en">English</TabsTrigger>
+                    <TabsTrigger value={Language.pt_BR}>Português</TabsTrigger>
+                    <TabsTrigger value={Language.en}>English</TabsTrigger>
                   </TabsList>
 
-                  {["pt-BR", "en"].map((lang) => {
+                  {([Language.pt_BR, Language.en] as Language[]).map((lang) => {
                     const t = form.translations.find((x) => x.language === lang)!;
                     return (
                       <TabsContent key={lang} value={lang} className="space-y-4">

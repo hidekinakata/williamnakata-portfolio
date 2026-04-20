@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Language } from "@db/enums";
 import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { ProfileModel, ProfileTranslationModel } from "@db/models";
@@ -50,12 +51,11 @@ export async function updateProfile(
         linkedin,
         instagram,
         translations: {
-          upsert: translations.map((t) => ({
-            where: {
-              profileId_language: { profileId: id, language: t.language },
-            },
-            update: { bio: t.bio, cvUrl: t.cvUrl },
-            create: { language: t.language, bio: t.bio, cvUrl: t.cvUrl },
+          deleteMany: {},
+          create: translations.map((t) => ({
+            language: t.language,
+            bio: t.bio,
+            cvUrl: t.cvUrl,
           })),
         },
       },
@@ -76,14 +76,13 @@ export async function getProfile() {
     });
 
     if (!profile) {
-      // Cria um perfil inicial se não existir
       profile = await prisma.profile.create({
         data: {
           name: "Seu Nome",
           translations: {
             create: [
-              { language: "pt-BR", bio: "", cvUrl: "" },
-              { language: "en", bio: "", cvUrl: "" },
+              { language: Language.pt_BR, bio: "", cvUrl: "" },
+              { language: Language.en, bio: "", cvUrl: "" },
             ],
           },
         },
