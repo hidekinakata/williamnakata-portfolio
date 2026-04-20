@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Language } from "@db/enums";
 import { revalidatePath } from "next/cache";
 
 export async function getExperiences() {
@@ -20,7 +21,7 @@ export async function createExperience(formData: {
   startDate: string;
   endDate: string | null;
   current: boolean;
-  translations: { language: string; position: string; description: string }[];
+  translations: { language: Language; position: string; description: string }[];
 }) {
   try {
     await prisma.experience.create({
@@ -50,7 +51,7 @@ export async function updateExperience(
     startDate: string;
     endDate: string | null;
     current: boolean;
-    translations: { language: string; position: string; description: string }[];
+    translations: { language: Language; position: string; description: string }[];
   },
 ) {
   try {
@@ -62,11 +63,8 @@ export async function updateExperience(
         endDate: formData.endDate ? new Date(formData.endDate) : null,
         current: formData.current,
         translations: {
-          upsert: formData.translations.map((t) => ({
-            where: { experienceId_language: { experienceId: id, language: t.language } },
-            update: { position: t.position, description: t.description },
-            create: { language: t.language, position: t.position, description: t.description },
-          })),
+          deleteMany: {},
+          create: formData.translations,
         },
       },
     });
