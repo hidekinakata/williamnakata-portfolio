@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FileText, LayoutTemplate } from "lucide-react";
@@ -17,13 +17,6 @@ interface SplitScreenEditorProps {
   intro?: string;
 }
 
-type Patch = {
-  valueRef: AdminSection[];
-  markdown: string | undefined;
-  sections: AdminSection[] | undefined;
-  lastEditedBy: "markdown" | "blocks" | null;
-};
-
 export default function SplitScreenEditor({
   value,
   onChange,
@@ -31,85 +24,99 @@ export default function SplitScreenEditor({
   intro,
 }: SplitScreenEditorProps) {
   const [mode, setMode] = useState<"markdown" | "blocks">("blocks");
-  const [patch, setPatch] = useState<Patch>({
-    valueRef: value,
-    markdown: undefined,
-    sections: undefined,
-    lastEditedBy: null,
-  });
+  const [sections, setSections] = useState<AdminSection[]>(value);
+  const [markdown, setMarkdown] = useState<string>(sectionsToMarkdown(value));
 
-  if (patch.valueRef !== value) {
-    const currentMarkdown =
-      patch.markdown ?? sectionsToMarkdown(patch.sections ?? patch.valueRef);
-    const newMarkdown = sectionsToMarkdown(value);
-    if (currentMarkdown !== newMarkdown) {
-      setPatch({
-        valueRef: value,
-        markdown: undefined,
-        sections: undefined,
-        lastEditedBy: null,
-      });
-    } else {
-      setPatch({ ...patch, valueRef: value });
+  const syncedRef = useRef<AdminSection[] | null>(null);
+  const isSyncingRef = useRef(false);
+
+  useEffect(() => {
+    if (isSyncingRef.current) {
+      isSyncingRef.current = false;
+      return;
     }
-  }
+    if (syncedRef.current === value) return;
+    const md = sectionsToMarkdown(value);
+    setSections(value);
+    setMarkdown(md);
+    syncedRef.current = value;
+  }, [value]);
 
-  const blockSections = patch.sections ?? value;
-  const markdown = patch.markdown ?? sectionsToMarkdown(value);
-  const lastEditedBy = patch.lastEditedBy;
+  const notifyParent = useCallback(
+    (newSections: AdminSection[], newMarkdown: string) => {
+      const renumbered = renumberSections(newSections);
+      const md = sectionsToMarkdown(renumbered);
+      isSyncingRef.current = true;
+      setSections(renumbered);
+      setMarkdown(md);
+      syncedRef.current = renumbered;
+      onChange(renumbered);
+    },
+    [onChange],
+  );
 
-  const handleMarkdownChange = (text: string) => {
-    const parsed = markdownToSections(text) as AdminSection[];
-    setPatch({
-      valueRef: value,
-      markdown: text,
-      sections: parsed,
-      lastEditedBy: "markdown",
-    });
-    onChange(parsed);
-  };
+  const handleMarkdownChange = useCallback(
+    (text: string) => {
+      setMarkdown(text);
+      const parsed = markdownToSections(text) as AdminSection[];
+      const renumbered = renumberSections(parsed);
+      isSyncingRef.current = true;
+      setSections(renumbered);
+      syncedRef.current = renumbered;
+      onChange(renumbered);
+    },
+    [onChange],
+  );
 
-  const handleBlocksChange = (sections: AdminSection[]) => {
-    const renumbered = renumberSections(sections);
-    setPatch({
-      valueRef: value,
-      markdown: sectionsToMarkdown(renumbered),
-      sections: renumbered,
-      lastEditedBy: "blocks",
-    });
-    onChange(renumbered);
-  };
+  const handleBlocksChange = useCallback(
+    (newSections: AdminSection[]) => {
+      notifyParent(newSections, "");
+    },
+    [notifyParent],
+  );
 
-  const handleAddSection = () => {
-    handleBlocksChange([...blockSections, createEmptySection()]);
-  };
+  const handleAddSection = useCallback(() => {
+    handleBlocksChange([...sections, createEmptySection()]);
+  }, [sections, handleBlocksChange]);
 
-  const handleRemoveSection = (index: number) => {
-    handleBlocksChange(blockSections.filter((_, i) => i !== index));
-  };
+  const handleRemoveSection = useCallback(
+    (index: number) => {
+      handleBlocksChange(sections.filter((_, i) => i !== index));
+    },
+    [sections, handleBlocksChange],
+  );
 
-  const handleMoveSectionUp = (index: number) => {
-    if (index === 0) return;
-    const sections = [...blockSections];
-    [sections[index - 1], sections[index]] = [sections[index], sections[index - 1]];
-    handleBlocksChange(sections);
-  };
+  const handleMoveSectionUp = useCallback(
+    (index: number) => {
+      if (index === 0) return;
+      const next = [...sections];
+      [next[index - 1], next[index]] = [next[index], next[index - 1]];
+      handleBlocksChange(next);
+    },
+    [sections, handleBlocksChange],
+  );
 
-  const handleMoveSectionDown = (index: number) => {
-    if (index >= blockSections.length - 1) return;
-    const sections = [...blockSections];
-    [sections[index], sections[index + 1]] = [sections[index + 1], sections[index]];
-    handleBlocksChange(sections);
-  };
+  const handleMoveSectionDown = useCallback(
+    (index: number) => {
+      if (index >= sections.length - 1) return;
+      const next = [...sections];
+      [next[index], next[index + 1]] = [next[index + 1], next[index]];
+      handleBlocksChange(next);
+    },
+    [sections, handleBlocksChange],
+  );
 
-  const handleSectionChange = (index: number, section: AdminSection) => {
-    const sections = [...blockSections];
-    sections[index] = section;
-    handleBlocksChange(sections);
-  };
+  const handleSectionChange = useCallback(
+    (index: number, section: AdminSection) => {
+      const next = [...sections];
+      next[index] = section;
+      handleBlocksChange(next);
+    },
+    [sections, handleBlocksChange],
+  );
 
   return (
-    <div className="flex flex-col gap-4" data-last-edited={lastEditedBy ?? ""}>
+    <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
         <Button
           type="button"
@@ -141,12 +148,12 @@ export default function SplitScreenEditor({
             />
           ) : (
             <div className="space-y-4">
-              {blockSections.map((section, idx) => (
+              {sections.map((section, idx) => (
                 <SectionEditor
                   key={section.id}
                   section={section}
                   index={idx}
-                  total={blockSections.length}
+                  total={sections.length}
                   onChange={(s) => handleSectionChange(idx, s)}
                   onRemove={() => handleRemoveSection(idx)}
                   onMoveUp={() => handleMoveSectionUp(idx)}
@@ -169,7 +176,7 @@ export default function SplitScreenEditor({
         <div className="sticky top-20 w-[480px] shrink-0 self-start">
           <div className="rounded-lg border bg-white p-6 shadow-sm">
             <ArticlePreview
-              sections={blockSections}
+              sections={sections}
               title={title}
               intro={intro}
             />
