@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50",
+        "fixed top-0 left-0 z-50 w-screen max-w-[100vw] overflow-hidden",
         "grid grid-cols-[1fr_auto_1fr] items-center",
         "h-20 lg:h-28 3xl:h-32 px-6 lg:px-12 3xl:px-20 4xl:px-32",
         "transition-transform duration-300",
