@@ -1,19 +1,17 @@
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { Article } from "@/lib/articles";
 
 interface RelatedArticlesProps {
   articles: Article[];
   locale: string;
+  label: string;
 }
 
-export default function RelatedArticles({ articles, locale }: RelatedArticlesProps) {
-  const t = useTranslations("Article");
-
+export default function RelatedArticles({ articles, locale, label }: RelatedArticlesProps) {
   return (
     <div className="border border-royal-500/[0.13] bg-royal-500/[0.04] p-4">
       <h3 className="mb-3 font-mono text-2xs tracking-[0.12em] text-royal-500 uppercase">
-        {t("related")}
+        {label}
       </h3>
       <ul className="flex flex-col gap-2.5">
         {articles.map((article, index) => (
@@ -23,7 +21,7 @@ export default function RelatedArticles({ articles, locale }: RelatedArticlesPro
               className="group flex items-start gap-2 transition-colors"
             >
               <div
-                className={`mt-1.5 h-1.5 w-1.5 rounded-full transition-colors ${
+                className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full transition-colors ${
                   index === 0 ? "bg-royal-500" : "bg-royal-500/30"
                 }`}
               />

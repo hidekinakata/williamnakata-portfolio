@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
 import { ArticleSection as ArticleSectionType } from "@/lib/articles";
 
 interface TableOfContentsProps {
   sections: ArticleSectionType[];
+  label: string;
 }
 
-export default function TableOfContents({ sections }: TableOfContentsProps) {
-  const t = useTranslations("Article");
+export default function TableOfContents({ sections, label }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
@@ -35,7 +34,7 @@ export default function TableOfContents({ sections }: TableOfContentsProps) {
   return (
     <div className="border-l-2 border-royal-500 pl-5">
       <h3 className="mb-4 font-mono text-2xs tracking-[0.12em] text-royal-500 uppercase">
-        {t("tableOfContents")}
+        {label}
       </h3>
       <ul className="flex flex-col gap-2.5">
         {sections.map((section) => {

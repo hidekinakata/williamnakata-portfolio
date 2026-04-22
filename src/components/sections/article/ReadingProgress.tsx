@@ -1,15 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
 
 interface ReadingProgressProps {
   sectionsCount: number;
   readTime: string;
+  label: string;
+  sectionLabel: string;
+  ofLabel: string;
+  minLeftLabel: string;
 }
 
-export default function ReadingProgress({ sectionsCount, readTime }: ReadingProgressProps) {
-  const t = useTranslations("Article");
+export default function ReadingProgress({
+  sectionsCount,
+  readTime,
+  label,
+  sectionLabel,
+  ofLabel,
+  minLeftLabel,
+}: ReadingProgressProps) {
   const [progress, setProgress] = useState(0);
   const [currentSection, setCurrentSection] = useState(1);
 
@@ -49,7 +58,7 @@ export default function ReadingProgress({ sectionsCount, readTime }: ReadingProg
       <div className="mb-3 flex items-center gap-2">
         <div className="h-1.5 w-1.5 rounded-full bg-royal-500" />
         <h3 className="font-mono text-2xs tracking-[0.12em] text-royal-500 uppercase">
-          {t("readingProgress")}
+          {label}
         </h3>
       </div>
 
@@ -62,9 +71,9 @@ export default function ReadingProgress({ sectionsCount, readTime }: ReadingProg
 
       <div className="flex items-center justify-between font-mono text-2xs">
         <span className="text-royal-500/60">
-          {t("section")} {currentSection} {t("of")} {sectionsCount}
+          {sectionLabel} {currentSection} {ofLabel} {sectionsCount}
         </span>
-        <span className="text-royal-500">~{minutesLeft} {t("minLeft")}</span>
+        <span className="text-royal-500">~{minutesLeft} {minLeftLabel}</span>
       </div>
     </div>
   );

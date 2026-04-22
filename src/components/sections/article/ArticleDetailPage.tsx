@@ -1,18 +1,36 @@
-import { Article } from "@/lib/articles";
+import { Article, getRelatedArticles } from "@/lib/articles";
+import { getTranslations } from "next-intl/server";
 import PostHeader from "./PostHeader";
 import PostMeta from "./PostMeta";
 import ArticleContent from "./ArticleContent";
 import Sidebar from "./Sidebar";
 import ArticleEnd from "./ArticleEnd";
-import { getRelatedArticles } from "@/lib/articles";
 
 interface ArticleDetailPageProps {
   article: Article;
   locale: string;
 }
 
-export default function ArticleDetailPage({ article, locale }: ArticleDetailPageProps) {
+export default async function ArticleDetailPage({ article, locale }: ArticleDetailPageProps) {
+  const t = await getTranslations("Article");
   const relatedArticles = getRelatedArticles(article.slug, article.relatedSlugs);
+
+  const sidebarStrings = {
+    tableOfContents: t("tableOfContents"),
+    readingProgress: t("readingProgress"),
+    section: t("section"),
+    of: t("of"),
+    minLeft: t("minLeft"),
+    author: t("author"),
+    authorName: t("authorName"),
+    authorRole: t("authorRole"),
+    related: t("related"),
+  };
+
+  const articleEndStrings = {
+    backToBlog: t("backToBlog"),
+    shareArticle: t("shareArticle"),
+  };
 
   return (
     <section className="relative flex min-h-svh w-full flex-col items-center overflow-hidden pt-20 pb-16">
@@ -34,13 +52,14 @@ export default function ArticleDetailPage({ article, locale }: ArticleDetailPage
                   readTime={article.readTime}
                   relatedArticles={relatedArticles}
                   locale={locale}
+                  strings={sidebarStrings}
                 />
               </div>
             </div>
           </div>
 
           <div className="pt-8">
-            <ArticleEnd locale={locale} />
+            <ArticleEnd locale={locale} strings={articleEndStrings} />
           </div>
         </div>
       </div>
