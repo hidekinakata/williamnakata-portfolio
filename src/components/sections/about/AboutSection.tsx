@@ -15,7 +15,7 @@ export default function AboutSection() {
   const t = useTranslations("About");
 
   return (
-    <Section>
+    <Section id="about">
       <Section.ColumnLayout>
         <Section.LeftColumn className="">
           <SectionTitle

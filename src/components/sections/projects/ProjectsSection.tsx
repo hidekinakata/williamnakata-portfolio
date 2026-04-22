@@ -73,7 +73,7 @@ export default function ProjectsSection({ projects }: Props) {
   const t = useTranslations("Projects");
 
   return (
-    <Section>
+    <Section id="projects">
       <SectionDivider className="3xl:mb-32 mb-16 lg:mb-24" />
       <Section.ColumnLayout>
         <Section.LeftColumn>

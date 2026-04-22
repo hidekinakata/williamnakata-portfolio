@@ -59,7 +59,7 @@ export default function ExperienceSection({
   };
 
   return (
-    <Section>
+    <Section id="experience">
       <SectionDivider className="3xl:mb-32 mb-16 lg:mb-24" />
       <Section.ColumnLayout>
         <Section.LeftColumn>

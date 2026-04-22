@@ -33,9 +33,9 @@ const Navbar = () => {
   }, [lastScrollY]);
 
   const navItems = [
-    { label: t("About"), href: "#about" },
-    { label: t("Experience"), href: "#experience" },
-    { label: t("Projects"), href: "#projects" },
+    { label: t("About"), href: `/${locale}#about` },
+    { label: t("Experience"), href: `/${locale}#experience` },
+    { label: t("Projects"), href: `/${locale}#projects` },
   ];
 
   return (
@@ -81,14 +81,17 @@ const Navbar = () => {
       </nav>
 
       {/* Logo */}
-      <h1 className="col-start-2 flex flex-col items-center uppercase *:leading-none">
+      <Link
+        href="/"
+        className="col-start-2 flex flex-col items-center uppercase *:leading-none"
+      >
         <span className="mr-1.5 text-xs font-thin tracking-[0.08em] text-white/50 lg:mr-2 lg:text-sm">
           William
         </span>
         <span className="text-xl font-extrabold tracking-tight text-white lg:text-2xl">
           Nakata
         </span>
-      </h1>
+      </Link>
 
       {/* Mobile burger */}
       <div className="flex items-center justify-end lg:hidden">
