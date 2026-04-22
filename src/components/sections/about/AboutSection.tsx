@@ -7,7 +7,6 @@ import DecorativeLine from "../shared/DecorativeLine";
 
 const stats = [
   { key: "years", valueKey: "yearsValue", labelKey: "yearsLabel" },
-  { key: "queries", valueKey: "queriesValue", labelKey: "queriesLabel" },
   { key: "projects", valueKey: "projectsValue", labelKey: "projectsLabel" },
   { key: "models", valueKey: "modelsValue", labelKey: "modelsLabel" },
 ];
@@ -37,7 +36,7 @@ export default function AboutSection() {
             {t("paragraph2")}
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 3xl:gap-10 mt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 3xl:gap-10 mt-2">
             {stats.map((stat) => (
               <div key={stat.key} className="flex flex-col gap-1">
                 <span className="font-sans-decorated text-3xl lg:text-4xl 3xl:text-5xl leading-none font-black text-royal-500">
