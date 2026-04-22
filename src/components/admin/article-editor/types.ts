@@ -15,4 +15,5 @@ export type AdminSection = {
   number: string;
   title: string;
   blocks: AdminContentBlock[];
+  subsections?: AdminSection[];
 };

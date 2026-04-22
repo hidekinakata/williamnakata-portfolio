@@ -12,6 +12,7 @@ export type ArticleSection = {
   number: string;
   title: string;
   blocks: ContentBlock[];
+  subsections?: ArticleSection[];
 };
 
 export type Article = {

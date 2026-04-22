@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import BlockEditor from "./BlockEditor";
 import type { AdminSection } from "./types";
-import { createEmptyBlock, slugify, genId } from "./utils";
+import { createEmptyBlock, createEmptySubSection, slugify, genId } from "./utils";
 
 interface SectionEditorProps {
   section: AdminSection;
@@ -26,6 +26,7 @@ interface SectionEditorProps {
   onRemove: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
+  isSubSection?: boolean;
 }
 
 export default function SectionEditor({
@@ -36,8 +37,27 @@ export default function SectionEditor({
   onRemove,
   onMoveUp,
   onMoveDown,
+  isSubSection = false,
 }: SectionEditorProps) {
   const [expanded, setExpanded] = useState(true);
+
+  const handleAddSubSection = () => {
+    onChange({
+      ...section,
+      subsections: [...(section.subsections || []), createEmptySubSection()],
+    });
+  };
+
+  const handleRemoveSubSection = (subIdx: number) => {
+    const subs = (section.subsections || []).filter((_, i) => i !== subIdx);
+    onChange({ ...section, subsections: subs.length ? subs : undefined });
+  };
+
+  const handleChangeSubSection = (subIdx: number, sub: AdminSection) => {
+    const subs = [...(section.subsections || [])];
+    subs[subIdx] = sub;
+    onChange({ ...section, subsections: subs });
+  };
 
   return (
     <Card>
@@ -46,7 +66,7 @@ export default function SectionEditor({
           <div className="flex items-center gap-2">
             <GripVertical className="text-muted-foreground h-4 w-4" />
             <span className="text-sm font-medium">
-              Seção {section.number}
+              {isSubSection ? "Subseção" : "Seção"} {section.number}
             </span>
             {section.title && (
               <span className="text-muted-foreground truncate text-sm">
@@ -55,32 +75,36 @@ export default function SectionEditor({
             )}
           </div>
           <div className="flex items-center gap-1">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              disabled={index === 0}
-              onClick={(e) => {
-                e.stopPropagation();
-                onMoveUp();
-              }}
-            >
-              <ArrowUp className="h-3 w-3" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              disabled={index === total - 1}
-              onClick={(e) => {
-                e.stopPropagation();
-                onMoveDown();
-              }}
-            >
-              <ArrowDown className="h-3 w-3" />
-            </Button>
+            {!isSubSection && (
+              <>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7"
+                  disabled={index === 0}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMoveUp();
+                  }}
+                >
+                  <ArrowUp className="h-3 w-3" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7"
+                  disabled={index === total - 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onMoveDown();
+                  }}
+                >
+                  <ArrowDown className="h-3 w-3" />
+                </Button>
+              </>
+            )}
             <Button
               type="button"
               variant="ghost"
@@ -104,7 +128,7 @@ export default function SectionEditor({
       {expanded && (
         <CardContent className="space-y-4 pt-0">
           <div className="space-y-1">
-            <Label className="text-xs">Título da Seção</Label>
+            <Label className="text-xs">Título da {isSubSection ? "Subseção" : "Seção"}</Label>
             <Input
               value={section.title}
               onChange={(e) => {
@@ -115,7 +139,7 @@ export default function SectionEditor({
                   id: title ? slugify(title) : genId(),
                 });
               }}
-              placeholder="Título da seção"
+              placeholder={isSubSection ? "Título da subseção" : "Título da seção"}
             />
           </div>
 
@@ -124,7 +148,7 @@ export default function SectionEditor({
             <Input
               value={section.id}
               onChange={(e) => onChange({ ...section, id: e.target.value })}
-              placeholder="identificador-da-secao"
+              placeholder="identificador"
               className="font-mono text-sm"
             />
           </div>
@@ -168,6 +192,38 @@ export default function SectionEditor({
               Adicionar Bloco
             </Button>
           </div>
+
+          {!isSubSection && (
+            <div className="space-y-3 border-t pt-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-medium">Subseções</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddSubSection}
+                >
+                  <Plus className="mr-1 h-3 w-3" />
+                  Subseção
+                </Button>
+              </div>
+              <div className="space-y-3 pl-4">
+                {(section.subsections || []).map((sub, subIdx) => (
+                  <SectionEditor
+                    key={sub.id}
+                    section={sub}
+                    index={subIdx}
+                    total={(section.subsections || []).length}
+                    onChange={(s) => handleChangeSubSection(subIdx, s)}
+                    onRemove={() => handleRemoveSubSection(subIdx)}
+                    onMoveUp={() => {}}
+                    onMoveDown={() => {}}
+                    isSubSection
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </CardContent>
       )}
     </Card>

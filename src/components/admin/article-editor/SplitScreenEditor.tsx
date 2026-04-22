@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useLayoutEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FileText, LayoutTemplate } from "lucide-react";
@@ -30,20 +30,17 @@ export default function SplitScreenEditor({
   const syncedRef = useRef<AdminSection[] | null>(null);
   const isSyncingRef = useRef(false);
 
-  useEffect(() => {
-    if (isSyncingRef.current) {
-      isSyncingRef.current = false;
-      return;
-    }
+  useLayoutEffect(() => {
     if (syncedRef.current === value) return;
-    const md = sectionsToMarkdown(value);
-    setSections(value);
-    setMarkdown(md);
-    syncedRef.current = value;
+    queueMicrotask(() => {
+      setSections(value);
+      setMarkdown(sectionsToMarkdown(value));
+      syncedRef.current = value;
+    });
   }, [value]);
 
   const notifyParent = useCallback(
-    (newSections: AdminSection[], newMarkdown: string) => {
+    (newSections: AdminSection[]) => {
       const renumbered = renumberSections(newSections);
       const md = sectionsToMarkdown(renumbered);
       isSyncingRef.current = true;
@@ -70,7 +67,7 @@ export default function SplitScreenEditor({
 
   const handleBlocksChange = useCallback(
     (newSections: AdminSection[]) => {
-      notifyParent(newSections, "");
+      notifyParent(newSections);
     },
     [notifyParent],
   );

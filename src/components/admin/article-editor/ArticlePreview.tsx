@@ -58,6 +58,34 @@ function PreviewBlock({ block }: { block: AdminContentBlock }) {
   }
 }
 
+function PreviewSection({ section, depth = 0 }: { section: AdminSection; depth?: number }) {
+  const isSub = depth > 0;
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <span
+          className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold text-white ${isSub ? "bg-purple-400" : "bg-purple-600"}`}
+        >
+          {section.number}
+        </span>
+        <h2
+          className={`font-semibold text-neutral-900 ${isSub ? "text-base" : "text-lg"}`}
+        >
+          {section.title}
+        </h2>
+      </div>
+      <div className={`space-y-3 ${isSub ? "pl-6" : "pl-8"}`}>
+        {section.blocks.map((block) => (
+          <PreviewBlock key={block.id} block={block} />
+        ))}
+        {section.subsections?.map((sub) => (
+          <PreviewSection key={sub.id} section={sub} depth={depth + 1} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ArticlePreview({ sections, title, intro }: ArticlePreviewProps) {
   return (
     <div className="space-y-6">
@@ -68,21 +96,7 @@ export default function ArticlePreview({ sections, title, intro }: ArticlePrevie
         <p className="italic text-neutral-600">{intro}</p>
       )}
       {sections.map((section) => (
-        <div key={section.id} className="space-y-3">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-600 text-xs font-semibold text-white">
-              {section.number}
-            </span>
-            <h2 className="text-lg font-semibold text-neutral-900">
-              {section.title}
-            </h2>
-          </div>
-          <div className="space-y-3 pl-8">
-            {section.blocks.map((block) => (
-              <PreviewBlock key={block.id} block={block} />
-            ))}
-          </div>
-        </div>
+        <PreviewSection key={section.id} section={section} />
       ))}
     </div>
   );

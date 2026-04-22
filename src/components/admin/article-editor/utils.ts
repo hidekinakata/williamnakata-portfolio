@@ -17,6 +17,19 @@ export function renumberSections(sections: AdminSection[]): AdminSection[] {
   return sections.map((s, i) => ({
     ...s,
     number: String(i + 1).padStart(2, "0"),
+    subsections: s.subsections
+      ? renumberSubsections(String(i + 1).padStart(2, "0"), s.subsections)
+      : undefined,
+  }));
+}
+
+function renumberSubsections(
+  parentNumber: string,
+  subsections: AdminSection[],
+): AdminSection[] {
+  return subsections.map((s, i) => ({
+    ...s,
+    number: `${parentNumber}.${String(i + 1).padStart(2, "0")}`,
   }));
 }
 
@@ -42,6 +55,16 @@ export function createEmptyBlock(type: AdminContentBlock["type"] = "paragraph"):
 }
 
 export function createEmptySection(): AdminSection {
+  return {
+    id: genId(),
+    number: "",
+    title: "",
+    blocks: [createEmptyBlock("paragraph")],
+    subsections: [],
+  };
+}
+
+export function createEmptySubSection(): AdminSection {
   return {
     id: genId(),
     number: "",
