@@ -2,10 +2,10 @@ import { prisma } from "./prisma";
 import { mapLocale } from "./data";
 
 export type ContentBlock =
-  | { type: "paragraph"; text: string }
-  | { type: "code"; filename: string; language: string; code: string }
-  | { type: "quote"; text: string; author: string; year: string }
-  | { type: "numberedList"; items: { number: string; text: string }[] };
+  | { id?: string; type: "paragraph"; text: string }
+  | { id?: string; type: "code"; filename: string; language: string; code: string }
+  | { id?: string; type: "quote"; text: string; author: string; year: string }
+  | { id?: string; type: "numberedList"; items: { number: string; text: string }[] };
 
 export type ArticleSection = {
   id: string;
