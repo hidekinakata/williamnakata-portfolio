@@ -103,6 +103,35 @@
     "p4Desc": "API de cobrança de alta performance em .NET 8, processando pagamentos e fluxos de recuperação de dívidas.",
     "p4Tags": "[\"C#\", \".NET 8\", \"EF Core\", \"SQL Server\"]"
   },
+  "Blog": {
+    "label": "Blog · Insights",
+    "heading1": "PENSAMENTOS",
+    "heading2": "& CÓDIGO",
+    "subtitle": "Explorando a interseção entre inteligência artificial, desenvolvimento fullstack e engenharia criativa.",
+    "ctaPrimary": "Ler mais recente",
+    "ctaSecondary": "Todos os posts",
+    "badge": "4 Artigos · Atualizado 2026",
+    "searchPlaceholder": "Buscar artigos...",
+    "filterAll": "Todas as tags",
+    "empty": "Nenhum artigo encontrado.",
+    "coordinates": "23.5505° S · 46.6333° O",
+    "rotatedLabel": "Neural · Interface · Blog",
+    "archiveLabel": "Arquivo"
+  },
+  "Article": {
+    "breadcrumb": "Blog · Artigo",
+    "backToBlog": "Voltar ao Blog",
+    "shareArticle": "Compartilhar Artigo",
+    "tableOfContents": "Índice",
+    "readingProgress": "Progresso de Leitura",
+    "author": "Autor",
+    "authorName": "William Nakata",
+    "authorRole": "Fullstack Dev · AI Engineer",
+    "related": "Relacionados",
+    "section": "Seção",
+    "of": "de",
+    "minLeft": "min restantes"
+  },
   "Stack": {
     "label": "Stack Principal",
     "summary1": "7 Domínios ",

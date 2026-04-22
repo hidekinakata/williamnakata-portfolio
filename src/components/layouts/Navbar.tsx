@@ -124,14 +124,14 @@ const Navbar = () => {
         </div>
 
         {/* Blog */}
-        <a
-          href="#"
+        <Link
+          href="/articles"
           className="flex items-center gap-2 border border-lime-500/40 bg-lime-400/8 px-4 py-2 transition-colors hover:border-lime-500/65 hover:bg-lime-400/12"
         >
           <span className="text-2xs/3 font-mono font-medium tracking-[0.2em] text-lime-400 uppercase">
             {t("Blog")}
           </span>
-        </a>
+        </Link>
 
         {/* Download CV */}
         <a

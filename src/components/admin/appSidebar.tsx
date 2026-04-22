@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   BookOpen,
   Briefcase,
+  FileText,
   LayoutDashboard,
   Settings2,
   User,
@@ -44,6 +45,11 @@ const data = {
       title: "Projetos",
       url: "/kirby-admin/panel/projects",
       icon: BookOpen,
+    },
+    {
+      title: "Artigos",
+      url: "/kirby-admin/panel/articles",
+      icon: FileText,
     },
     {
       title: "Configurações",

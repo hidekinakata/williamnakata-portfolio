@@ -37,8 +37,7 @@ export default function Page() {
         </div>
       </header>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div className="bg-muted/50 flex aspect-video items-center justify-center rounded-xl border p-6">
+        <div className="grid auto-rows-min gap-4 md:grid-cols-4">          <div className="bg-muted/50 flex aspect-video items-center justify-center rounded-xl border p-6">
             <div className="text-center">
               <h3 className="text-lg font-medium">Perfil</h3>
               <p className="text-muted-foreground mt-1 text-sm">
@@ -59,6 +58,14 @@ export default function Page() {
               <h3 className="text-lg font-medium">Projetos</h3>
               <p className="text-muted-foreground mt-1 text-sm">
                 Exiba seus melhores trabalhos e tecnologias.
+              </p>
+            </div>
+          </div>
+          <div className="bg-muted/50 flex aspect-video items-center justify-center rounded-xl border p-6">
+            <div className="text-center">
+              <h3 className="text-lg font-medium">Artigos</h3>
+              <p className="text-muted-foreground mt-1 text-sm">
+                Escreva e gerencie artigos do blog.
               </p>
             </div>
           </div>
@@ -101,6 +108,15 @@ export default function Page() {
                 <p className="text-muted-foreground text-sm">
                   <span className="text-foreground font-medium">Projetos:</span>{" "}
                   Gerencie os projetos exibidos, tags e links.
+                </p>
+              </li>
+              <li className="flex gap-3">
+                <div className="bg-primary/10 text-primary flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold">
+                  4
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  <span className="text-foreground font-medium">Artigos:</span>{" "}
+                  Escreva, edite e publique artigos no blog com suporte a múltiplos idiomas.
                 </p>
               </li>
             </ul>
