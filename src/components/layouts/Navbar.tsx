@@ -43,7 +43,7 @@ const Navbar = () => {
       className={cn(
         "fixed top-0 left-0 z-50 w-screen max-w-[100vw] overflow-hidden",
         "grid grid-cols-[1fr_auto_1fr] items-center",
-        "3xl:h-32 3xl:px-20 4xl:px-32 h-20 px-6 lg:h-28 lg:px-12",
+        "3xl:h-32 3xl:px-20 4xl:px-32 h-20 px-6 lg:px-12",
         "transition-transform duration-300",
         "bg-linear-to-b from-black/50 via-black/10 to-black/0",
         isVisible ? "translate-y-0" : "-translate-y-full",
