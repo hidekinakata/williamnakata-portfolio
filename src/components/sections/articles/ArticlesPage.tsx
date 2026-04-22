@@ -95,10 +95,10 @@ export default function ArticlesPage({ articles, allTags, locale, strings }: Art
               variants={fadeInUp}
               className="flex flex-col leading-none"
             >
-              <span className="font-sans-decorated text-[3.25rem] leading-[0.9] font-black tracking-tight text-white/92 uppercase sm:text-6xl lg:text-7xl xl:text-[4.25rem] 2xl:text-[5rem] 3xl:text-[5.6rem] 4xl:text-[6rem]">
+              <span className="font-sans-decorated text-[3.25rem] leading-[0.9] font-black tracking-tight text-white/92 uppercase break-words sm:text-6xl lg:text-7xl xl:text-[4.25rem] 2xl:text-[5rem] 3xl:text-[5.6rem] 4xl:text-[6rem]">
                 {strings.heading1}
               </span>
-              <span className="font-sans-decorated text-royal-500 -mt-1 text-[4rem] leading-[0.86] font-black tracking-tight uppercase sm:text-7xl lg:text-8xl xl:text-[6.55rem] 2xl:text-[7.5rem] 3xl:text-[8.6rem] 4xl:text-[9.25rem]">
+              <span className="font-sans-decorated text-royal-500 -mt-1 text-[4rem] leading-[0.86] font-black tracking-tight uppercase break-words sm:text-7xl lg:text-8xl xl:text-[6.55rem] 2xl:text-[7.5rem] 3xl:text-[8.6rem] 4xl:text-[9.25rem]">
                 {strings.heading2}
               </span>
             </motion.h1>
