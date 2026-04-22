@@ -107,7 +107,8 @@
   },
   "Stack": {
     "label": "Core Stack",
-    "summary": "7 Domains · 24+ Technologies",
+    "summary1": "7 Domains",
+    "summary2": "24+ Technologies",
     "s1Title": "Python · ML",
     "s1Sub": "scikit-learn · torch · pandas · fastapi",
     "s1Tags": "[\"NumPy\", \"Keras\", \"LangChain\"]",

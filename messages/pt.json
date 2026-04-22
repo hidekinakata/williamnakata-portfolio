@@ -107,7 +107,8 @@
   },
   "Stack": {
     "label": "Stack Principal",
-    "summary": "7 Domínios · 24+ Tecnologias",
+    "summary1": "7 Domínios ",
+    "summary2": "24+ Tecnologias",
     "s1Title": "Python · ML",
     "s1Sub": "scikit-learn · torch · pandas · fastapi",
     "s1Tags": "[\"NumPy\", \"Keras\", \"LangChain\"]",

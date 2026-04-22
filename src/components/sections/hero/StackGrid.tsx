@@ -14,6 +14,7 @@ const cardData = [
 ];
 
 const summaryColors = ["#4ADE80", "#A78BFA", "#FB923C", "#38BDF8", "#2DD4BF", "#FBBF24", "#F87171"];
+const gradientScroll = `${summaryColors.length * 30}px`;
 
 export default function StackGrid() {
   const t = useTranslations("Stack");
@@ -38,7 +39,7 @@ export default function StackGrid() {
           return (
             <div
               key={card.titleKey}
-              className="flex flex-col gap-2 p-3 sm:p-4 2xl:p-[1.125rem] 3xl:p-5 min-h-[108px] sm:min-h-[132px] 2xl:min-h-[144px] 3xl:min-h-[156px]"
+              className="flex flex-col gap-2 p-3 sm:p-4 2xl:p-[1.125rem] 3xl:p-5 min-h-27 sm:min-h-28 xl:min-h-30 2xl:min-h-36 3xl:min-h-39"
               style={{
                 backgroundColor: `${c}08`,
                 borderTop: `1px solid ${c}55`,
@@ -71,14 +72,14 @@ export default function StackGrid() {
 
               {/* Subtitle */}
               <span
-                className="font-mono text-3xs 3xl:text-2xs tracking-widest leading-relaxed"
+                className="font-mono text-3xs 3xl:text-2xs tracking-widest leading-relaxed my-auto"
                 style={{ color: `${c}73` }}
               >
                 {t(card.subtitleKey)}
               </span>
 
               {/* Tags */}
-              <div className="mt-auto flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-1">
                 {(JSON.parse(t(card.tagsKey)) as string[]).map((tag: string) => (
                   <span
                     key={tag}
@@ -99,14 +100,18 @@ export default function StackGrid() {
       </div>
 
       {/* Summary footer */}
-      <div className="flex items-center justify-center gap-2">
-        {summaryColors.map((color, i) => (
-          <span key={i} className="h-1 w-1 shrink-0" style={{ backgroundColor: color }} />
-        ))}
-        <span className="w-6 h-px bg-white/13" />
+      <div className="flex items-center gap-2">
+        <span className="w-6 h-px animate-gradient-flow" style={{ background: `linear-gradient(to right, ${summaryColors.join(", ")}, ${summaryColors[0]})`, "--gradient-scroll": gradientScroll } as React.CSSProperties}/>
+        <span className="h-1 w-1 shrink-0 rotate-45 bg-white/50" />
         <span className="font-mono text-3xs 3xl:text-2xs leading-3 tracking-[0.15em] uppercase font-medium text-white/80">
-          {t("summary")}
+          {t("summary1")}
         </span>
+        <span className="h-px w-2 shrink-0  bg-white/50" />
+        <span className="font-mono text-3xs 3xl:text-2xs leading-3 tracking-[0.15em] uppercase font-medium text-white/80">
+          {t("summary2")}
+        </span>
+        <span className="h-1 w-1 shrink-0 rotate-45 bg-white/50" />
+        <span className="grow h-px animate-gradient-flow" style={{ background: `linear-gradient(to right, ${summaryColors.join(", ")}, ${summaryColors[0]})`, "--gradient-scroll": gradientScroll } as React.CSSProperties} />
       </div>
     </div>
   );

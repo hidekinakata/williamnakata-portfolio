@@ -216,6 +216,17 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@keyframes gradient-flow {
+  from { background-position: 0 0; }
+  to { background-position: var(--gradient-scroll, 200px) 0; }
+}
+
+.animate-gradient-flow {
+  background-size: var(--gradient-scroll, 200px) 100%;
+  background-repeat: repeat;
+  animation: gradient-flow 0.8s linear infinite;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
