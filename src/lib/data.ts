@@ -22,7 +22,9 @@ export type ExperienceGroup = {
   roles: ExperienceRole[];
 };
 
-export async function getExperiences(locale: string): Promise<ExperienceGroup[]> {
+export async function getExperiences(
+  locale: string,
+): Promise<ExperienceGroup[]> {
   const language = mapLocale(locale);
 
   const experiences = await prisma.experience.findMany({
@@ -50,9 +52,13 @@ export async function getExperiences(locale: string): Promise<ExperienceGroup[]>
     if (existing) {
       existing.roles.push(role);
       if (exp.current) existing.current = true;
-      if (exp.startDate < existing.startDate) existing.startDate = exp.startDate;
+      if (exp.startDate < existing.startDate)
+        existing.startDate = exp.startDate;
       if (!existing.current) {
-        if (!existing.endDate || (exp.endDate && exp.endDate > existing.endDate)) {
+        if (
+          !existing.endDate ||
+          (exp.endDate && exp.endDate > existing.endDate)
+        ) {
           existing.endDate = exp.endDate;
         }
       }

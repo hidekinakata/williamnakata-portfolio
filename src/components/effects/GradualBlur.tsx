@@ -315,7 +315,7 @@ const GradualBlur: React.FC<GradualBlurProps> = (props) => {
       onMouseEnter={hoverIntensity ? () => setIsHovered(true) : undefined}
       onMouseLeave={hoverIntensity ? () => setIsHovered(false) : undefined}
     >
-      <div className="relative w-full h-full">{blurDivs}</div>
+      <div className="relative h-full w-full">{blurDivs}</div>
       {props.children && <div className="relative">{props.children}</div>}
     </div>
   );

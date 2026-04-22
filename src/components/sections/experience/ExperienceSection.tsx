@@ -41,7 +41,10 @@ function formatDate(date: string | Date, locale: string): string {
 export default function ExperienceSection({ experiences }: Props) {
   const t = useTranslations("Experience");
   const locale = useLocale();
-  const [selected, setSelected] = useState<{ role: ExperienceRole; company: string } | null>(null);
+  const [selected, setSelected] = useState<{
+    role: ExperienceRole;
+    company: string;
+  } | null>(null);
 
   const formatRange = (
     start: string | Date,
@@ -54,57 +57,57 @@ export default function ExperienceSection({ experiences }: Props) {
   };
 
   return (
-    <section className="w-full px-6 sm:px-8 lg:px-14 xl:px-20 3xl:px-28 4xl:px-40 py-16 lg:py-24 3xl:py-32">
-      <SectionDivider className="mb-16 lg:mb-24 3xl:mb-32" />
-      <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 3xl:gap-32">
-        <div className="flex flex-col gap-6 3xl:gap-8 lg:w-[35%] shrink-0 min-w-0">
+    <section className="3xl:px-28 4xl:px-40 3xl:py-32 w-full px-6 py-16 sm:px-8 lg:px-14 lg:py-24 xl:px-20">
+      <SectionDivider className="3xl:mb-32 mb-16 lg:mb-24" />
+      <div className="3xl:gap-32 flex flex-col gap-10 lg:flex-row lg:gap-20">
+        <div className="3xl:gap-8 flex min-w-0 shrink-0 flex-col gap-6 lg:w-[35%]">
           <SectionLabel>{t("label")}</SectionLabel>
-          <h2 className="font-sans-decorated text-5xl sm:text-6xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-8xl leading-tight font-black tracking-tight text-white/92 uppercase">
+          <h2 className="font-sans-decorated 3xl:text-8xl text-5xl leading-tight font-black tracking-tight text-white/92 uppercase sm:text-6xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
             {t("heading1")}
           </h2>
-          <h2 className="font-sans-decorated text-5xl sm:text-7xl lg:text-5xl xl:text-6xl 2xl:text-7xl 3xl:text-9xl leading-none font-black tracking-tight text-royal-500 uppercase -mt-2">
+          <h2 className="font-sans-decorated 3xl:text-9xl text-royal-500 -mt-2 text-5xl leading-none font-black tracking-tight uppercase sm:text-7xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
             {t("heading2")}
           </h2>
           <DecorativeLine />
-          <p className="font-sans text-sm leading-relaxed text-neutral-500 italic max-w-sm">
+          <p className="max-w-sm font-sans text-sm leading-relaxed text-neutral-500 italic">
             {t("subtitle")}
           </p>
         </div>
 
-        <div className="flex flex-col gap-0 grow min-w-0 overflow-hidden">
+        <div className="flex min-w-0 grow flex-col gap-0 overflow-hidden">
           {experiences.map((group, ci) => (
             <div
               key={`${group.company}-${ci}`}
-              className={`flex gap-4 sm:gap-7 backdrop-blur-sm ${ci < experiences.length - 1 ? "pb-10 border-b border-white/6" : "pt-2"} ${ci > 0 ? "pt-10" : ""}`}
+              className={`flex gap-4 backdrop-blur-sm sm:gap-7 ${ci < experiences.length - 1 ? "border-b border-white/6 pb-10" : "pt-2"} ${ci > 0 ? "pt-10" : ""}`}
             >
-              <div className="flex flex-col items-center w-6 shrink-0">
+              <div className="flex w-6 shrink-0 flex-col items-center">
                 <span
-                  className={`rounded-full size-2.5 shrink-0 border-[1.5px] bg-void ${
+                  className={`bg-void size-2.5 shrink-0 rounded-full border-[1.5px] ${
                     group.current ? "border-royal-500" : "border-royal-500/40"
                   }`}
                 />
                 <span
-                  className={`w-px grow ${group.current ? "bg-gradient-to-b from-royal-500/40 to-royal-500/5" : "bg-gradient-to-b from-royal-500/20 to-royal-500/3"}`}
+                  className={`w-px grow ${group.current ? "from-royal-500/40 to-royal-500/5 bg-gradient-to-b" : "from-royal-500/20 to-royal-500/3 bg-gradient-to-b"}`}
                 />
               </div>
 
-              <div className="flex flex-col grow min-w-0 overflow-hidden">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-6">
+              <div className="flex min-w-0 grow flex-col overflow-hidden">
+                <div className="mb-6 flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex flex-col">
                     <span
-                      className={`font-sans-decorated text-base sm:text-lg tracking-[0.02em] uppercase font-bold ${
+                      className={`font-sans-decorated text-base font-bold tracking-[0.02em] uppercase sm:text-lg ${
                         group.current ? "text-white" : "text-neutral-400"
                       }`}
                     >
                       {group.company}
                     </span>
-                    <span className="font-mono text-3xs leading-3 tracking-[0.18em] uppercase text-neutral-700 mt-1">
+                    <span className="text-3xs mt-1 font-mono leading-3 tracking-[0.18em] text-neutral-700 uppercase">
                       {group.roles.length === 1
                         ? "1 " + t("roleSingular")
                         : group.roles.length + " " + t("rolePlural")}
                     </span>
                   </div>
-                  <span className="font-mono text-2xs leading-3 tracking-widest text-neutral-600">
+                  <span className="text-2xs font-mono leading-3 tracking-widest text-neutral-600">
                     {formatRange(group.startDate, group.endDate, group.current)}
                   </span>
                 </div>
@@ -113,39 +116,53 @@ export default function ExperienceSection({ experiences }: Props) {
                   {group.roles.map((role, ri) => {
                     const isLast = ri === group.roles.length - 1;
                     const isActive = role.current;
-                    const dotColor = isActive ? "bg-royal-500" : "bg-royal-500/35";
-                    const titleColor = isActive ? "text-royal-400" : "text-neutral-200";
-                    const dateColor = isActive ? "text-royal-400" : "text-neutral-600";
+                    const dotColor = isActive
+                      ? "bg-royal-500"
+                      : "bg-royal-500/35";
+                    const titleColor = isActive
+                      ? "text-royal-400"
+                      : "text-neutral-200";
+                    const dateColor = isActive
+                      ? "text-royal-400"
+                      : "text-neutral-600";
 
                     return (
                       <div
                         key={role.id}
-                        className={`flex flex-col gap-2.5 ${!isLast ? "pb-6 border-b border-white/5" : ""} ${ri > 0 ? "mt-5" : ""}`}
+                        className={`flex flex-col gap-2.5 ${!isLast ? "border-b border-white/5 pb-6" : ""} ${ri > 0 ? "mt-5" : ""}`}
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            <span className={`rounded-full size-1.5 shrink-0 ${dotColor}`} />
+                          <div className="flex min-w-0 items-center gap-2.5">
                             <span
-                              className={`font-sans-decorated text-sm sm:text-base leading-5 tracking-[0.02em] uppercase font-bold truncate ${titleColor}`}
+                              className={`size-1.5 shrink-0 rounded-full ${dotColor}`}
+                            />
+                            <span
+                              className={`font-sans-decorated truncate text-sm leading-5 font-bold tracking-[0.02em] uppercase sm:text-base ${titleColor}`}
                             >
                               {role.position}
                             </span>
                           </div>
                           <span
-                            className={`font-mono text-2xs leading-3 tracking-[0.08em] font-medium shrink-0 ${dateColor}`}
+                            className={`text-2xs shrink-0 font-mono leading-3 font-medium tracking-[0.08em] ${dateColor}`}
                           >
-                            {formatRange(role.startDate, role.endDate, role.current)}
+                            {formatRange(
+                              role.startDate,
+                              role.endDate,
+                              role.current,
+                            )}
                           </span>
                         </div>
 
-                        <div className="flex items-baseline gap-3 pl-4 overflow-hidden">
-                          <p className="font-sans text-xs leading-relaxed italic text-neutral-500 truncate min-w-0 flex-1">
+                        <div className="flex items-baseline gap-3 overflow-hidden pl-4">
+                          <p className="min-w-0 flex-1 truncate font-sans text-xs leading-relaxed text-neutral-500 italic">
                             {role.description}
                           </p>
                           {role.description && (
                             <button
-                              onClick={() => setSelected({ role, company: group.company })}
-                              className="shrink-0 font-mono text-3xs leading-3 tracking-[0.14em] uppercase font-medium text-royal-400 hover:text-royal-300 transition-colors cursor-pointer whitespace-nowrap"
+                              onClick={() =>
+                                setSelected({ role, company: group.company })
+                              }
+                              className="text-3xs text-royal-400 hover:text-royal-300 shrink-0 cursor-pointer font-mono leading-3 font-medium tracking-[0.14em] whitespace-nowrap uppercase transition-colors"
                             >
                               {t("seeMore")}
                             </button>
@@ -161,7 +178,10 @@ export default function ExperienceSection({ experiences }: Props) {
         </div>
       </div>
 
-      <DialogPrimitive.Root open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+      <DialogPrimitive.Root
+        open={!!selected}
+        onOpenChange={(open) => !open && setSelected(null)}
+      >
         <AnimatePresence>
           {!!selected && (
             <DialogPrimitive.Portal forceMount>
@@ -177,31 +197,35 @@ export default function ExperienceSection({ experiences }: Props) {
 
               <DialogPrimitive.Content asChild forceMount>
                 <motion.div
-                  className="fixed left-1/2 top-1/2 z-50 w-full max-w-2xl max-h-[85vh] overflow-y-auto -translate-x-1/2 -translate-y-1/2 border border-white/10 bg-[#07060f] p-8 shadow-2xl text-white focus:outline-none"
+                  className="fixed top-1/2 left-1/2 z-50 max-h-[85vh] w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto border border-white/10 bg-[#07060f] p-8 text-white shadow-2xl focus:outline-none"
                   initial={{ opacity: 0, scale: 0.96, y: 12 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.96, y: 12 }}
                   transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <div className="flex flex-col gap-1 mb-6 pr-8">
-                    <span className="font-mono text-3xs leading-3 tracking-[0.18em] uppercase text-neutral-500">
+                  <div className="mb-6 flex flex-col gap-1 pr-8">
+                    <span className="text-3xs font-mono leading-3 tracking-[0.18em] text-neutral-500 uppercase">
                       {selected.company}
                     </span>
-                    <DialogPrimitive.Title className="font-sans-decorated text-xl sm:text-2xl tracking-[0.02em] uppercase font-bold text-royal-400 mt-1">
+                    <DialogPrimitive.Title className="font-sans-decorated text-royal-400 mt-1 text-xl font-bold tracking-[0.02em] uppercase sm:text-2xl">
                       {selected.role.position}
                     </DialogPrimitive.Title>
-                    <span className="font-mono text-2xs leading-3 tracking-[0.12em] text-neutral-500 mt-2">
-                      {formatRange(selected.role.startDate, selected.role.endDate, selected.role.current)}
+                    <span className="text-2xs mt-2 font-mono leading-3 tracking-[0.12em] text-neutral-500">
+                      {formatRange(
+                        selected.role.startDate,
+                        selected.role.endDate,
+                        selected.role.current,
+                      )}
                     </span>
                   </div>
 
-                  <div className="w-full h-px bg-white/8 mb-6" />
+                  <div className="mb-6 h-px w-full bg-white/8" />
 
-                  <p className="font-sans text-sm leading-relaxed text-neutral-300 whitespace-pre-wrap">
+                  <p className="font-sans text-sm leading-relaxed whitespace-pre-wrap text-neutral-300">
                     {selected.role.description}
                   </p>
 
-                  <DialogPrimitive.Close className="absolute top-5 right-5 text-neutral-500 hover:text-white transition-colors cursor-pointer">
+                  <DialogPrimitive.Close className="absolute top-5 right-5 cursor-pointer text-neutral-500 transition-colors hover:text-white">
                     <X className="h-4 w-4" />
                     <span className="sr-only">Fechar</span>
                   </DialogPrimitive.Close>

@@ -93,7 +93,10 @@ export default function ExperiencePage() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<ExperienceForm>(emptyForm());
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -101,7 +104,9 @@ export default function ExperiencePage() {
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const openNew = () => {
     setForm(emptyForm());
@@ -115,7 +120,11 @@ export default function ExperiencePage() {
     setOpen(true);
   };
 
-  const handleTranslationChange = (lang: string, field: keyof Translation, value: string) => {
+  const handleTranslationChange = (
+    lang: string,
+    field: keyof Translation,
+    value: string,
+  ) => {
     setForm((f) => ({
       ...f,
       translations: f.translations.map((t) =>
@@ -142,7 +151,10 @@ export default function ExperiencePage() {
       : await createExperience(payload);
 
     if (result.success) {
-      setMessage({ type: "success", text: form.id ? "Experiência atualizada!" : "Experiência criada!" });
+      setMessage({
+        type: "success",
+        text: form.id ? "Experiência atualizada!" : "Experiência criada!",
+      });
       await load();
       setTimeout(() => setOpen(false), 800);
     } else {
@@ -167,7 +179,9 @@ export default function ExperiencePage() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/kirby-admin/panel">Kirby Admin</BreadcrumbLink>
+              <BreadcrumbLink href="/kirby-admin/panel">
+                Kirby Admin
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -181,7 +195,9 @@ export default function ExperiencePage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Experiências</h1>
-            <p className="text-muted-foreground">Gerencie sua trajetória profissional.</p>
+            <p className="text-muted-foreground">
+              Gerencie sua trajetória profissional.
+            </p>
           </div>
           <Button onClick={openNew}>
             <Plus className="mr-2 h-4 w-4" />
@@ -196,7 +212,9 @@ export default function ExperiencePage() {
         ) : experiences.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-muted-foreground mb-4">Nenhuma experiência cadastrada.</p>
+              <p className="text-muted-foreground mb-4">
+                Nenhuma experiência cadastrada.
+              </p>
               <Button onClick={openNew}>
                 <Plus className="mr-2 h-4 w-4" />
                 Adicionar Experiência
@@ -206,7 +224,9 @@ export default function ExperiencePage() {
         ) : (
           <div className="space-y-3">
             {experiences.map((exp) => {
-              const ptTrans = exp.translations.find((t) => t.language === Language.pt_BR);
+              const ptTrans = exp.translations.find(
+                (t) => t.language === Language.pt_BR,
+              );
               return (
                 <Card key={exp.id}>
                   <CardContent className="flex items-center justify-between py-4">
@@ -215,14 +235,26 @@ export default function ExperiencePage() {
                       <p className="text-muted-foreground text-sm">
                         {ptTrans?.position || "—"}
                       </p>
-                      <p className="text-muted-foreground text-xs mt-0.5">
-                        {exp.startDate.toLocaleDateString("pt-BR", { month: "short", year: "numeric" })}
+                      <p className="text-muted-foreground mt-0.5 text-xs">
+                        {exp.startDate.toLocaleDateString("pt-BR", {
+                          month: "short",
+                          year: "numeric",
+                        })}
                         {" — "}
-                        {exp.current ? "Atual" : exp.endDate?.toLocaleDateString("pt-BR", { month: "short", year: "numeric" }) || "—"}
+                        {exp.current
+                          ? "Atual"
+                          : exp.endDate?.toLocaleDateString("pt-BR", {
+                              month: "short",
+                              year: "numeric",
+                            }) || "—"}
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="icon" onClick={() => openEdit(exp)}>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => openEdit(exp)}
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
@@ -247,9 +279,11 @@ export default function ExperiencePage() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{form.id ? "Editar Experiência" : "Nova Experiência"}</DialogTitle>
+            <DialogTitle>
+              {form.id ? "Editar Experiência" : "Nova Experiência"}
+            </DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -264,7 +298,9 @@ export default function ExperiencePage() {
                   <Input
                     id="company"
                     value={form.company}
-                    onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, company: e.target.value }))
+                    }
                     required
                   />
                 </div>
@@ -276,7 +312,9 @@ export default function ExperiencePage() {
                       id="startDate"
                       type="date"
                       value={form.startDate}
-                      onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, startDate: e.target.value }))
+                      }
                       required
                     />
                   </div>
@@ -286,7 +324,9 @@ export default function ExperiencePage() {
                       id="endDate"
                       type="date"
                       value={form.endDate}
-                      onChange={(e) => setForm((f) => ({ ...f, endDate: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, endDate: e.target.value }))
+                      }
                       disabled={form.current}
                     />
                   </div>
@@ -296,9 +336,13 @@ export default function ExperiencePage() {
                   <Checkbox
                     id="current"
                     checked={form.current}
-                    onCheckedChange={(v) => setForm((f) => ({ ...f, current: !!v }))}
+                    onCheckedChange={(v) =>
+                      setForm((f) => ({ ...f, current: !!v }))
+                    }
                   />
-                  <Label htmlFor="current" className="cursor-pointer">Emprego atual</Label>
+                  <Label htmlFor="current" className="cursor-pointer">
+                    Emprego atual
+                  </Label>
                 </div>
               </CardContent>
             </Card>
@@ -306,7 +350,9 @@ export default function ExperiencePage() {
             <Card>
               <CardHeader>
                 <CardTitle>Conteúdo por Idioma</CardTitle>
-                <CardDescription>Cargo e descrição em cada idioma.</CardDescription>
+                <CardDescription>
+                  Cargo e descrição em cada idioma.
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue={Language.pt_BR}>
@@ -316,14 +362,26 @@ export default function ExperiencePage() {
                   </TabsList>
 
                   {([Language.pt_BR, Language.en] as Language[]).map((lang) => {
-                    const t = form.translations.find((x) => x.language === lang)!;
+                    const t = form.translations.find(
+                      (x) => x.language === lang,
+                    )!;
                     return (
-                      <TabsContent key={lang} value={lang} className="space-y-4">
+                      <TabsContent
+                        key={lang}
+                        value={lang}
+                        className="space-y-4"
+                      >
                         <div className="space-y-2">
                           <Label>Cargo</Label>
                           <Input
                             value={t.position}
-                            onChange={(e) => handleTranslationChange(lang, "position", e.target.value)}
+                            onChange={(e) =>
+                              handleTranslationChange(
+                                lang,
+                                "position",
+                                e.target.value,
+                              )
+                            }
                           />
                         </div>
                         <div className="space-y-2">
@@ -331,7 +389,13 @@ export default function ExperiencePage() {
                           <Textarea
                             rows={4}
                             value={t.description}
-                            onChange={(e) => handleTranslationChange(lang, "description", e.target.value)}
+                            onChange={(e) =>
+                              handleTranslationChange(
+                                lang,
+                                "description",
+                                e.target.value,
+                              )
+                            }
                           />
                         </div>
                       </TabsContent>
@@ -354,11 +418,17 @@ export default function ExperiencePage() {
             )}
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
                 Cancelar
               </Button>
               <Button type="submit" disabled={saving}>
-                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                {saving ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
                 {form.id ? "Salvar Alterações" : "Criar Experiência"}
               </Button>
             </DialogFooter>

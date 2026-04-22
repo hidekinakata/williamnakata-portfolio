@@ -104,23 +104,23 @@ export const LoadingScreen = () => {
     <AnimatePresence mode="wait" onExitComplete={onLoadingComplete}>
       {isVisible && (
         <motion.div
-          className="fixed inset-0 w-dvw h-dvh z-50 flex flex-col items-center justify-center bg-neutral-950 p-8"
+          className="fixed inset-0 z-50 flex h-dvh w-dvw flex-col items-center justify-center bg-neutral-950 p-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
         >
           <div
-            className={"relative flex-1 w-full bg-neutral-950/50 rounded-xl"}
+            className={"relative w-full flex-1 rounded-xl bg-neutral-950/50"}
           >
-            <motion.span className="absolute top-0 left-0 w-6 h-6 border-l border-t border-white/25" />
-            <motion.span className="absolute top-0 right-0 w-6 h-6 border-r border-t border-white/25" />
-            <motion.span className="absolute bottom-0 right-0 w-6 h-6 border-r border-b border-white/25" />
-            <motion.span className="absolute bottom-0 left-0 w-6 h-6 border-l border-b border-white/25" />
+            <motion.span className="absolute top-0 left-0 h-6 w-6 border-t border-l border-white/25" />
+            <motion.span className="absolute top-0 right-0 h-6 w-6 border-t border-r border-white/25" />
+            <motion.span className="absolute right-0 bottom-0 h-6 w-6 border-r border-b border-white/25" />
+            <motion.span className="absolute bottom-0 left-0 h-6 w-6 border-b border-l border-white/25" />
 
             <span
               className={
-                "absolute top-3 right-6 font-mono text-xs text text-neutral-400"
+                "text absolute top-3 right-6 font-mono text-xs text-neutral-400"
               }
             >
               EST. 2026
@@ -128,7 +128,7 @@ export const LoadingScreen = () => {
 
             <div
               className={
-                "absolute w-full top-3/7 left-1/2 -translate-1/2 flex flex-col items-center justify-center "
+                "absolute top-3/7 left-1/2 flex w-full -translate-1/2 flex-col items-center justify-center"
               }
             >
               <motion.svg
@@ -137,7 +137,7 @@ export const LoadingScreen = () => {
                 viewBox="0 0 255 255"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-28 sm:w-30 md:w-36 lg:w-40 h-auto "
+                className="h-auto w-28 sm:w-30 md:w-36 lg:w-40"
                 variants={svgVariants}
               >
                 <defs>
@@ -235,7 +235,7 @@ export const LoadingScreen = () => {
               </motion.svg>
               <motion.h1
                 className={
-                  "text-xl lg:text-3xl text-center font-sans-decorated mt-8"
+                  "font-sans-decorated mt-8 text-center text-xl lg:text-3xl"
                 }
                 variants={titleVariants}
               >
@@ -245,24 +245,24 @@ export const LoadingScreen = () => {
 
             <motion.div
               className={
-                "absolute bottom-16 left-1/2 -translate-x-1/2 h-fit font-mono font-thin text-neutral-400 w-full md:w-1/3 lg:w-72 "
+                "absolute bottom-16 left-1/2 h-fit w-full -translate-x-1/2 font-mono font-thin text-neutral-400 md:w-1/3 lg:w-72"
               }
             >
-              <div className={"w-full flex justify-between items-center"}>
-                <span className="text-sm  lg:text-base">Loading...</span>
+              <div className={"flex w-full items-center justify-between"}>
+                <span className="text-sm lg:text-base">Loading...</span>
                 <span className={"text-berwickberry-500"}>
                   {progress.toFixed(2)} %
                 </span>
               </div>
-              <div className={"block relative w-full h-2"}>
+              <div className={"relative block h-2 w-full"}>
                 <span
                   className={
-                    "absolute top-0 left-0 block mt-2 h-px w-full bg-white/20"
+                    "absolute top-0 left-0 mt-2 block h-px w-full bg-white/20"
                   }
                 ></span>
                 <motion.span
                   className={
-                    "absolute top-0 left-0 block mt-2 h-px w-full bg-white/60"
+                    "absolute top-0 left-0 mt-2 block h-px w-full bg-white/60"
                   }
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: progress / 100, transformOrigin: "left" }}

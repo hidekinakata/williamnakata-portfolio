@@ -1,7 +1,7 @@
 "use client";
 
-import React, {createContext, ReactNode, useEffect, useState} from "react";
-import {CookiesProvider, useCookies} from "react-cookie";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
+import { CookiesProvider, useCookies } from "react-cookie";
 
 type Theme = "light" | "dark" | "system";
 type Language = "en" | "pt-BR";
@@ -22,7 +22,7 @@ interface AppContextValue {
 
 export const AppContext = createContext<AppContextValue | undefined>(undefined);
 
-export const AppProviderBase = ({children}: { children: ReactNode }) => {
+export const AppProviderBase = ({ children }: { children: ReactNode }) => {
   const [cookies, setCookie] = useCookies(["theme", "language"]);
 
   const [theme, setTheme] = useState<Theme>(cookies.theme || "system");
@@ -60,13 +60,13 @@ export const AppProviderBase = ({children}: { children: ReactNode }) => {
     const currentTheme = ThemeArray.indexOf(theme);
     const nextTheme = (currentTheme + 1) % ThemeArray.length;
 
-    setCookie("theme", ThemeArray[nextTheme], {path: "/"});
+    setCookie("theme", ThemeArray[nextTheme], { path: "/" });
     setTheme(ThemeArray[nextTheme]);
   };
 
   const toggleLanguage = () => {
     const nextLanguage = language === "en" ? "pt-BR" : "en";
-    setCookie("language", nextLanguage, {path: "/"});
+    setCookie("language", nextLanguage, { path: "/" });
     setLanguage(nextLanguage);
   };
 
@@ -80,7 +80,7 @@ export const AppProviderBase = ({children}: { children: ReactNode }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const AppProvider = ({children}: { children: ReactNode }) => {
+export const AppProvider = ({ children }: { children: ReactNode }) => {
   return (
     <CookiesProvider>
       <AppProviderBase>{children}</AppProviderBase>

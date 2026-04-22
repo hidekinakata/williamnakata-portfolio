@@ -95,7 +95,11 @@ function toForm(proj: ProjectRow): ProjectForm {
     tagSearch: "",
     translations: ([Language.pt_BR, Language.en] as Language[]).map((lang) => {
       const t = proj.translations.find((x) => x.language === lang);
-      return { language: lang, title: t?.title || "", description: t?.description || "" };
+      return {
+        language: lang,
+        title: t?.title || "",
+        description: t?.description || "",
+      };
     }),
   };
 }
@@ -109,7 +113,10 @@ export default function ProjectsPage() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<ProjectForm>(emptyForm());
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = async () => {
@@ -120,7 +127,9 @@ export default function ProjectsPage() {
     setLoading(false);
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const openNew = () => {
     setForm(emptyForm());
@@ -134,7 +143,11 @@ export default function ProjectsPage() {
     setOpen(true);
   };
 
-  const handleTranslationChange = (lang: string, field: keyof Translation, value: string) => {
+  const handleTranslationChange = (
+    lang: string,
+    field: keyof Translation,
+    value: string,
+  ) => {
     setForm((f) => ({
       ...f,
       translations: f.translations.map((t) =>
@@ -165,9 +178,15 @@ export default function ProjectsPage() {
       setAllTags((prev) => {
         const exists = prev.find((t) => t.id === result.tag!.id);
         if (exists) return prev;
-        return [...prev, result.tag!].sort((a, b) => a.name.localeCompare(b.name));
+        return [...prev, result.tag!].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        );
       });
-      setForm((f) => ({ ...f, tagIds: [...f.tagIds, result.tag!.id], tagSearch: "" }));
+      setForm((f) => ({
+        ...f,
+        tagIds: [...f.tagIds, result.tag!.id],
+        tagSearch: "",
+      }));
     }
   };
 
@@ -209,7 +228,10 @@ export default function ProjectsPage() {
       : await createProject(payload);
 
     if (result.success) {
-      setMessage({ type: "success", text: form.id ? "Projeto atualizado!" : "Projeto criado!" });
+      setMessage({
+        type: "success",
+        text: form.id ? "Projeto atualizado!" : "Projeto criado!",
+      });
       await load();
       setTimeout(() => setOpen(false), 800);
     } else {
@@ -234,7 +256,9 @@ export default function ProjectsPage() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/kirby-admin/panel">Kirby Admin</BreadcrumbLink>
+              <BreadcrumbLink href="/kirby-admin/panel">
+                Kirby Admin
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -248,7 +272,9 @@ export default function ProjectsPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Projetos</h1>
-            <p className="text-muted-foreground">Gerencie os projetos exibidos no portfólio.</p>
+            <p className="text-muted-foreground">
+              Gerencie os projetos exibidos no portfólio.
+            </p>
           </div>
           <Button onClick={openNew}>
             <Plus className="mr-2 h-4 w-4" />
@@ -263,7 +289,9 @@ export default function ProjectsPage() {
         ) : projects.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-muted-foreground mb-4">Nenhum projeto cadastrado.</p>
+              <p className="text-muted-foreground mb-4">
+                Nenhum projeto cadastrado.
+              </p>
               <Button onClick={openNew}>
                 <Plus className="mr-2 h-4 w-4" />
                 Adicionar Projeto
@@ -273,7 +301,9 @@ export default function ProjectsPage() {
         ) : (
           <div className="space-y-3">
             {projects.map((proj) => {
-              const ptTrans = proj.translations.find((t) => t.language === Language.pt_BR);
+              const ptTrans = proj.translations.find(
+                (t) => t.language === Language.pt_BR,
+              );
               return (
                 <Card key={proj.id}>
                   <CardContent className="flex items-center justify-between py-4">
@@ -281,17 +311,29 @@ export default function ProjectsPage() {
                       <div className="flex items-center gap-2">
                         <p className="font-semibold">{ptTrans?.title || "—"}</p>
                         <Badge
-                          variant={proj.type === ProjectType.professional ? "default" : "secondary"}
+                          variant={
+                            proj.type === ProjectType.professional
+                              ? "default"
+                              : "secondary"
+                          }
                           className="text-xs"
                         >
-                          {proj.type === ProjectType.professional ? "Profissional" : "Pessoal"}
+                          {proj.type === ProjectType.professional
+                            ? "Profissional"
+                            : "Pessoal"}
                         </Badge>
                       </div>
-                      <p className="text-muted-foreground truncate text-sm">{ptTrans?.description || "—"}</p>
+                      <p className="text-muted-foreground truncate text-sm">
+                        {ptTrans?.description || "—"}
+                      </p>
                       {proj.tags.length > 0 && (
                         <div className="mt-1.5 flex flex-wrap gap-1">
                           {proj.tags.map((pt) => (
-                            <Badge key={pt.tagId} variant="secondary" className="text-xs">
+                            <Badge
+                              key={pt.tagId}
+                              variant="secondary"
+                              className="text-xs"
+                            >
                               {pt.tag.name}
                             </Badge>
                           ))}
@@ -299,7 +341,11 @@ export default function ProjectsPage() {
                       )}
                     </div>
                     <div className="ml-4 flex gap-2">
-                      <Button variant="outline" size="icon" onClick={() => openEdit(proj)}>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => openEdit(proj)}
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
@@ -324,40 +370,52 @@ export default function ProjectsPage() {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{form.id ? "Editar Projeto" : "Novo Projeto"}</DialogTitle>
+            <DialogTitle>
+              {form.id ? "Editar Projeto" : "Novo Projeto"}
+            </DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Informações Gerais</CardTitle>
-                <CardDescription>Links, imagem, tipo e tags do projeto.</CardDescription>
+                <CardDescription>
+                  Links, imagem, tipo e tags do projeto.
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="type">Tipo de Projeto</Label>
                   <Select
                     value={form.type}
-                    onValueChange={(v) => setForm((f) => ({ ...f, type: v as ProjectType }))}
+                    onValueChange={(v) =>
+                      setForm((f) => ({ ...f, type: v as ProjectType }))
+                    }
                   >
                     <SelectTrigger id="type">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={ProjectType.personal}>Pessoal</SelectItem>
-                      <SelectItem value={ProjectType.professional}>Profissional</SelectItem>
+                      <SelectItem value={ProjectType.personal}>
+                        Pessoal
+                      </SelectItem>
+                      <SelectItem value={ProjectType.professional}>
+                        Profissional
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
                   <Label>Imagem</Label>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-2">
                     <Input
                       value={form.imageUrl}
-                      onChange={(e) => setForm((f) => ({ ...f, imageUrl: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, imageUrl: e.target.value }))
+                      }
                       placeholder="https://..."
                     />
                     <input
@@ -374,7 +432,11 @@ export default function ProjectsPage() {
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploading}
                     >
-                      {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImageUp className="h-4 w-4" />}
+                      {uploading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <ImageUp className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -385,7 +447,9 @@ export default function ProjectsPage() {
                     <Input
                       id="link"
                       value={form.link}
-                      onChange={(e) => setForm((f) => ({ ...f, link: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, link: e.target.value }))
+                      }
                       placeholder="https://..."
                     />
                   </div>
@@ -394,7 +458,9 @@ export default function ProjectsPage() {
                     <Input
                       id="github"
                       value={form.github}
-                      onChange={(e) => setForm((f) => ({ ...f, github: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, github: e.target.value }))
+                      }
                       placeholder="https://github.com/..."
                     />
                   </div>
@@ -405,7 +471,9 @@ export default function ProjectsPage() {
                   <div className="flex gap-2">
                     <Input
                       value={form.tagSearch}
-                      onChange={(e) => setForm((f) => ({ ...f, tagSearch: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, tagSearch: e.target.value }))
+                      }
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
@@ -421,13 +489,13 @@ export default function ProjectsPage() {
                   </div>
 
                   {form.tagSearch.trim() && (
-                    <div className="border rounded-md mt-1 max-h-40 overflow-y-auto">
+                    <div className="mt-1 max-h-40 overflow-y-auto rounded-md border">
                       {filteredTags.map((tag) => (
                         <button
                           key={tag.id}
                           type="button"
                           onClick={() => handleAddTag(tag.id)}
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-accent"
+                          className="hover:bg-accent w-full px-3 py-2 text-left text-sm"
                         >
                           {tag.name}
                         </button>
@@ -436,7 +504,7 @@ export default function ProjectsPage() {
                         <button
                           type="button"
                           onClick={handleCreateAndAddTag}
-                          className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:bg-accent flex items-center gap-2"
+                          className="text-muted-foreground hover:bg-accent flex w-full items-center gap-2 px-3 py-2 text-left text-sm"
                         >
                           <Plus className="h-3 w-3" />
                           Criar &quot;{form.tagSearch.trim()}&quot;
@@ -446,11 +514,15 @@ export default function ProjectsPage() {
                   )}
 
                   {form.tagIds.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-2">
+                    <div className="mt-2 flex flex-wrap gap-1.5">
                       {form.tagIds.map((tagId) => {
                         const tag = allTags.find((t) => t.id === tagId);
                         return tag ? (
-                          <Badge key={tagId} variant="secondary" className="flex items-center gap-1 pr-1">
+                          <Badge
+                            key={tagId}
+                            variant="secondary"
+                            className="flex items-center gap-1 pr-1"
+                          >
                             {tag.name}
                             <button
                               type="button"
@@ -471,7 +543,9 @@ export default function ProjectsPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Conteúdo por Idioma</CardTitle>
-                <CardDescription>Título e descrição em cada idioma.</CardDescription>
+                <CardDescription>
+                  Título e descrição em cada idioma.
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue={Language.pt_BR}>
@@ -481,14 +555,26 @@ export default function ProjectsPage() {
                   </TabsList>
 
                   {([Language.pt_BR, Language.en] as Language[]).map((lang) => {
-                    const t = form.translations.find((x) => x.language === lang)!;
+                    const t = form.translations.find(
+                      (x) => x.language === lang,
+                    )!;
                     return (
-                      <TabsContent key={lang} value={lang} className="space-y-4">
+                      <TabsContent
+                        key={lang}
+                        value={lang}
+                        className="space-y-4"
+                      >
                         <div className="space-y-2">
                           <Label>Título</Label>
                           <Input
                             value={t.title}
-                            onChange={(e) => handleTranslationChange(lang, "title", e.target.value)}
+                            onChange={(e) =>
+                              handleTranslationChange(
+                                lang,
+                                "title",
+                                e.target.value,
+                              )
+                            }
                             required={lang === Language.pt_BR}
                           />
                         </div>
@@ -497,7 +583,13 @@ export default function ProjectsPage() {
                           <Textarea
                             rows={4}
                             value={t.description}
-                            onChange={(e) => handleTranslationChange(lang, "description", e.target.value)}
+                            onChange={(e) =>
+                              handleTranslationChange(
+                                lang,
+                                "description",
+                                e.target.value,
+                              )
+                            }
                           />
                         </div>
                       </TabsContent>
@@ -520,11 +612,17 @@ export default function ProjectsPage() {
             )}
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
                 Cancelar
               </Button>
               <Button type="submit" disabled={saving}>
-                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                {saving ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
                 {form.id ? "Salvar Alterações" : "Criar Projeto"}
               </Button>
             </DialogFooter>

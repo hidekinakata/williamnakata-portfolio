@@ -65,9 +65,13 @@ export async function uploadProjectImage(formData: FormData) {
     const supabase = await createAdminClient();
     const fileExt = file.name.split(".").pop();
     const fileName = `project-${Date.now()}.${fileExt}`;
-    const { error } = await supabase.storage.from("projects").upload(fileName, file);
+    const { error } = await supabase.storage
+      .from("projects")
+      .upload(fileName, file);
     if (error) throw error;
-    const { data: { publicUrl } } = supabase.storage.from("projects").getPublicUrl(fileName);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("projects").getPublicUrl(fileName);
     return { success: true, url: publicUrl };
   } catch (error) {
     console.error("Erro no upload da imagem:", error);

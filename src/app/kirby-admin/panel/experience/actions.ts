@@ -51,7 +51,11 @@ export async function updateExperience(
     startDate: string;
     endDate: string | null;
     current: boolean;
-    translations: { language: Language; position: string; description: string }[];
+    translations: {
+      language: Language;
+      position: string;
+      description: string;
+    }[];
   },
 ) {
   try {

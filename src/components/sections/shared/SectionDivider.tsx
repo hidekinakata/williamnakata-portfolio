@@ -1,5 +1,7 @@
-export default function SectionDivider({ className = "" }: { className?: string }) {
-  return (
-    <div className={`w-full h-px bg-white/7 ${className}`} />
-  );
+export default function SectionDivider({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return <div className={`h-px w-full bg-white/7 ${className}`} />;
 }

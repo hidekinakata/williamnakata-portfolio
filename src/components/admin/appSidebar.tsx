@@ -70,7 +70,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     "aspect-square size-8 grayscale-100 hover:grayscale-0"
                   }
                 ></Image>
-                <div className="grid flex-1 text-left text-sm leading-tight pl-1">
+                <div className="grid flex-1 pl-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">William Nakata</span>
                   <span className="truncate text-xs">Kirby ADMIN</span>
                 </div>

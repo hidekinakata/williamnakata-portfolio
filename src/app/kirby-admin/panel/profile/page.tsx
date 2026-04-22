@@ -246,7 +246,11 @@ export default function ProfilePage() {
                         )?.bio || ""
                       }
                       onChange={(e) =>
-                        handleTranslationChange(Language.pt_BR, "bio", e.target.value)
+                        handleTranslationChange(
+                          Language.pt_BR,
+                          "bio",
+                          e.target.value,
+                        )
                       }
                     />
                   </div>
@@ -254,8 +258,9 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <Label>Currículo PDF (PT)</Label>
                     <div className="flex flex-col gap-3">
-                      {profile?.translations.find((t) => t.language === Language.pt_BR)
-                        ?.cvUrl && (
+                      {profile?.translations.find(
+                        (t) => t.language === Language.pt_BR,
+                      )?.cvUrl && (
                         <div className="bg-muted flex items-center gap-2 rounded-md p-2 text-sm">
                           <FileText className="text-primary h-4 w-4" />
                           <span className="flex-1 truncate">
@@ -320,11 +325,16 @@ export default function ProfilePage() {
                       id="bio-en"
                       rows={6}
                       value={
-                        profile?.translations.find((t) => t.language === Language.en)
-                          ?.bio || ""
+                        profile?.translations.find(
+                          (t) => t.language === Language.en,
+                        )?.bio || ""
                       }
                       onChange={(e) =>
-                        handleTranslationChange(Language.en, "bio", e.target.value)
+                        handleTranslationChange(
+                          Language.en,
+                          "bio",
+                          e.target.value,
+                        )
                       }
                     />
                   </div>
@@ -332,8 +342,9 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <Label>Resume PDF (EN)</Label>
                     <div className="flex flex-col gap-3">
-                      {profile?.translations.find((t) => t.language === Language.en)
-                        ?.cvUrl && (
+                      {profile?.translations.find(
+                        (t) => t.language === Language.en,
+                      )?.cvUrl && (
                         <div className="bg-muted flex items-center gap-2 rounded-md p-2 text-sm">
                           <FileText className="text-primary h-4 w-4" />
                           <span className="flex-1 truncate">
@@ -380,8 +391,9 @@ export default function ProfilePage() {
                           ) : (
                             <FileUp className="mr-2 h-4 w-4" />
                           )}
-                          {profile.translations.find((t) => t.language === Language.en)
-                            ?.cvUrl
+                          {profile.translations.find(
+                            (t) => t.language === Language.en,
+                          )?.cvUrl
                             ? "Replace PDF"
                             : "Upload PDF (EN)"}
                         </Button>
