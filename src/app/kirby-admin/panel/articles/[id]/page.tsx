@@ -34,14 +34,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  ArrowDown,
-  ArrowUp,
-  ChevronDown,
-  ChevronUp,
-  GripVertical,
   Loader2,
   Plus,
-  Trash2,
   X,
 } from "lucide-react";
 import { Language } from "@db/enums";
@@ -53,6 +47,7 @@ import {
   updateArticle,
 } from "../actions";
 import type { ArticleFormData } from "../actions";
+import { SplitScreenEditor } from "@/components/admin/article-editor";
 
 type ContentBlock =
   | { id: string; type: "paragraph"; text: string }
@@ -103,24 +98,8 @@ const ICON_OPTIONS = [
   { value: "file-text", label: "File Text" },
 ];
 
-const BLOCK_TYPES = [
-  { value: "paragraph", label: "Parágrafo" },
-  { value: "code", label: "Código" },
-  { value: "quote", label: "Citação" },
-  { value: "numberedList", label: "Lista Numerada" },
-] as const;
-
 function generateId(): string {
   return Math.random().toString(36).substring(2, 10);
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
 }
 
 function createEmptyBlock(type: ContentBlock["type"] = "paragraph"): ContentBlock {
@@ -234,333 +213,6 @@ function toForm(article: ArticleData): ArticleForm {
   };
 }
 
-function BlockEditor({
-  block,
-  onChange,
-  onRemove,
-}: {
-  block: ContentBlock;
-  onChange: (block: ContentBlock) => void;
-  onRemove: () => void;
-}) {
-  return (
-    <div className="border-input rounded-md border p-3">
-      <div className="mb-2 flex items-center justify-between">
-        <Select
-          value={block.type}
-          onValueChange={(v) => {
-            onChange(createEmptyBlock(v as ContentBlock["type"]));
-          }}
-        >
-          <SelectTrigger className="w-44">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {BLOCK_TYPES.map((bt) => (
-              <SelectItem key={bt.value} value={bt.value}>
-                {bt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={onRemove}
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {block.type === "paragraph" && (
-        <Textarea
-          rows={3}
-          value={block.text}
-          onChange={(e) => onChange({ ...block, text: e.target.value })}
-          placeholder="Texto do parágrafo..."
-        />
-      )}
-
-      {block.type === "code" && (
-        <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <Label className="text-xs">Arquivo</Label>
-              <Input
-                value={block.filename}
-                onChange={(e) => onChange({ ...block, filename: e.target.value })}
-                placeholder="ex: index.tsx"
-              />
-            </div>
-            <div>
-              <Label className="text-xs">Linguagem</Label>
-              <Input
-                value={block.language}
-                onChange={(e) => onChange({ ...block, language: e.target.value })}
-                placeholder="ex: typescript"
-              />
-            </div>
-          </div>
-          <Textarea
-            rows={6}
-            value={block.code}
-            onChange={(e) => onChange({ ...block, code: e.target.value })}
-            placeholder="Código..."
-            className="font-mono text-sm"
-          />
-        </div>
-      )}
-
-      {block.type === "quote" && (
-        <div className="space-y-2">
-          <Textarea
-            rows={2}
-            value={block.text}
-            onChange={(e) => onChange({ ...block, text: e.target.value })}
-            placeholder="Texto da citação..."
-          />
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <Label className="text-xs">Autor</Label>
-              <Input
-                value={block.author}
-                onChange={(e) => onChange({ ...block, author: e.target.value })}
-                placeholder="Nome do autor"
-              />
-            </div>
-            <div>
-              <Label className="text-xs">Ano</Label>
-              <Input
-                value={block.year}
-                onChange={(e) => onChange({ ...block, year: e.target.value })}
-                placeholder="ex: 2024"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {block.type === "numberedList" && (
-        <div className="space-y-2">
-          {block.items.map((item, idx) => (
-            <div key={idx} className="flex items-start gap-2">
-              <Input
-                className="w-16 shrink-0"
-                value={item.number}
-                onChange={(e) => {
-                  const items = [...block.items];
-                  items[idx] = { ...items[idx], number: e.target.value };
-                  onChange({ ...block, items });
-                }}
-                placeholder="01"
-              />
-              <Textarea
-                rows={2}
-                className="flex-1"
-                value={item.text}
-                onChange={(e) => {
-                  const items = [...block.items];
-                  items[idx] = { ...items[idx], text: e.target.value };
-                  onChange({ ...block, items });
-                }}
-                placeholder="Texto do item..."
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="mt-1 h-8 w-8 shrink-0"
-                onClick={() => {
-                  const items = block.items.filter((_, i) => i !== idx);
-                  onChange({
-                    ...block,
-                    items: items.length ? items : [{ number: "1", text: "" }],
-                  });
-                }}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              onChange({
-                ...block,
-                items: [
-                  ...block.items,
-                  { number: String(block.items.length + 1), text: "" },
-                ],
-              })
-            }
-          >
-            <Plus className="mr-1 h-3 w-3" />
-            Item
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function SectionEditor({
-  section,
-  index,
-  total,
-  onChange,
-  onRemove,
-  onMoveUp,
-  onMoveDown,
-}: {
-  section: Section;
-  index: number;
-  total: number;
-  onChange: (section: Section) => void;
-  onRemove: () => void;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
-}) {
-  const [expanded, setExpanded] = useState(true);
-
-  return (
-    <Card>
-      <CardHeader className="cursor-pointer py-3" onClick={() => setExpanded(!expanded)}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <GripVertical className="text-muted-foreground h-4 w-4" />
-            <span className="text-sm font-medium">
-              Seção {section.number}
-            </span>
-            {section.title && (
-              <span className="text-muted-foreground truncate text-sm">
-                — {section.title}
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-1">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              disabled={index === 0}
-              onClick={(e) => {
-                e.stopPropagation();
-                onMoveUp();
-              }}
-            >
-              <ArrowUp className="h-3 w-3" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              disabled={index === total - 1}
-              onClick={(e) => {
-                e.stopPropagation();
-                onMoveDown();
-              }}
-            >
-              <ArrowDown className="h-3 w-3" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={(e) => {
-                e.stopPropagation();
-                onRemove();
-              }}
-            >
-              <Trash2 className="h-3 w-3" />
-            </Button>
-            {expanded ? (
-              <ChevronUp className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </div>
-        </div>
-      </CardHeader>
-      {expanded && (
-        <CardContent className="space-y-4 pt-0">
-          <div className="space-y-1">
-            <Label className="text-xs">Título da Seção</Label>
-            <Input
-              value={section.title}
-              onChange={(e) => {
-                const title = e.target.value;
-                onChange({
-                  ...section,
-                  title,
-                  id: title ? slugify(title) : generateId(),
-                });
-              }}
-              placeholder="Título da seção"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label className="text-xs">ID</Label>
-            <Input
-              value={section.id}
-              onChange={(e) => onChange({ ...section, id: e.target.value })}
-              placeholder="identificador-da-secao"
-              className="font-mono text-sm"
-            />
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label className="text-xs">Blocos de Conteúdo</Label>
-            </div>
-            {section.blocks.map((block, blockIdx) => (
-              <BlockEditor
-                key={block.id}
-                block={block}
-                onChange={(b) => {
-                  const blocks = [...section.blocks];
-                  blocks[blockIdx] = b;
-                  onChange({ ...section, blocks });
-                }}
-                onRemove={() => {
-                  const blocks = section.blocks.filter(
-                    (_, i) => i !== blockIdx,
-                  );
-                  onChange({
-                    ...section,
-                    blocks: blocks.length ? blocks : [createEmptyBlock("paragraph")],
-                  });
-                }}
-              />
-            ))}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                onChange({
-                  ...section,
-                  blocks: [...section.blocks, createEmptyBlock("paragraph")],
-                })
-              }
-            >
-              <Plus className="mr-1 h-3 w-3" />
-              Adicionar Bloco
-            </Button>
-          </div>
-        </CardContent>
-      )}
-    </Card>
-  );
-}
-
 export default function ArticleEditorPage({
   params,
 }: {
@@ -649,87 +301,16 @@ export default function ArticleEditorPage({
     }));
   };
 
-  const handleSectionChange = (
-    lang: Language,
-    sectionIdx: number,
-    section: Section,
-  ) => {
+  const handleSectionsChange = (lang: Language, sections: Section[]) => {
     setForm((f) => ({
       ...f,
       translations: f.translations.map((t) =>
-        t.language === lang
-          ? {
-              ...t,
-              sections: renumberSections(
-                t.sections.map((s, i) => (i === sectionIdx ? section : s)),
-              ),
-            }
-          : t,
+        t.language === lang ? { ...t, sections } : t,
       ),
     }));
   };
 
-  const handleAddSection = (lang: Language) => {
-    setForm((f) => ({
-      ...f,
-      translations: f.translations.map((t) =>
-        t.language === lang
-          ? {
-              ...t,
-              sections: renumberSections([...t.sections, createEmptySection()]),
-            }
-          : t,
-      ),
-    }));
-  };
 
-  const handleRemoveSection = (lang: Language, sectionIdx: number) => {
-    setForm((f) => ({
-      ...f,
-      translations: f.translations.map((t) =>
-        t.language === lang
-          ? {
-              ...t,
-              sections: renumberSections(
-                t.sections.filter((_, i) => i !== sectionIdx),
-              ),
-            }
-          : t,
-      ),
-    }));
-  };
-
-  const handleMoveSectionUp = (lang: Language, sectionIdx: number) => {
-    if (sectionIdx === 0) return;
-    setForm((f) => ({
-      ...f,
-      translations: f.translations.map((t) => {
-        if (t.language !== lang) return t;
-        const sections = [...t.sections];
-        [sections[sectionIdx - 1], sections[sectionIdx]] = [
-          sections[sectionIdx],
-          sections[sectionIdx - 1],
-        ];
-        return { ...t, sections: renumberSections(sections) };
-      }),
-    }));
-  };
-
-  const handleMoveSectionDown = (lang: Language, sectionIdx: number) => {
-    setForm((f) => ({
-      ...f,
-      translations: f.translations.map((t) => {
-        if (t.language !== lang) return t;
-        if (sectionIdx >= t.sections.length - 1) return t;
-        const sections = [...t.sections];
-        [sections[sectionIdx], sections[sectionIdx + 1]] = [
-          sections[sectionIdx + 1],
-          sections[sectionIdx],
-        ];
-        return { ...t, sections: renumberSections(sections) };
-      }),
-    }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1049,42 +630,12 @@ export default function ArticleEditorPage({
                           />
                         </div>
 
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <Label className="text-sm font-medium">
-                              Seções
-                            </Label>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleAddSection(lang)}
-                            >
-                              <Plus className="mr-1 h-3 w-3" />
-                              Seção
-                            </Button>
-                          </div>
-                          {t.sections.map((section, secIdx) => (
-                            <SectionEditor
-                              key={section.id}
-                              section={section}
-                              index={secIdx}
-                              total={t.sections.length}
-                              onChange={(s) =>
-                                handleSectionChange(lang, secIdx, s)
-                              }
-                              onRemove={() =>
-                                handleRemoveSection(lang, secIdx)
-                              }
-                              onMoveUp={() =>
-                                handleMoveSectionUp(lang, secIdx)
-                              }
-                              onMoveDown={() =>
-                                handleMoveSectionDown(lang, secIdx)
-                              }
-                            />
-                          ))}
-                        </div>
+                        <SplitScreenEditor
+                          value={t.sections}
+                          onChange={(sections) => handleSectionsChange(lang, sections)}
+                          title={t.title}
+                          intro={t.intro}
+                        />
                       </TabsContent>
                     );
                   })}
