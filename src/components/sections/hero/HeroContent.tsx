@@ -48,7 +48,7 @@ export default function HeroContent() {
       >
         <motion.div custom={0} variants={fadeInUp} className="flex items-center gap-2">
           <SectionLabel>{t("badge")}</SectionLabel>
-          <span className="font-mono text-3xs 3xl:text-xs leading-3 tracking-[0.14em] uppercase text-royal-500/40">
+          <span className="font-mono text-3xs 3xl:text-xs leading-3 tracking-[0.14em] uppercase text-royal-500/80">
             · 2025
           </span>
         </motion.div>
