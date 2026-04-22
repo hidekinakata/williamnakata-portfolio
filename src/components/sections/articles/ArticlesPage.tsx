@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import {
   Brain,
@@ -14,7 +13,7 @@ import {
   FileText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { articles, getAllTags } from "@/lib/articles";
+import { type Article } from "@/lib/articles";
 import SectionLabel from "@/components/sections/shared/SectionLabel";
 import DecorativeLine from "@/components/sections/shared/DecorativeLine";
 
@@ -34,11 +33,31 @@ const fadeInUp = {
   }),
 };
 
-export default function ArticlesPage() {
-  const t = useTranslations("Blog");
-  const locale = useLocale();
+interface BlogStrings {
+  label: string;
+  heading1: string;
+  heading2: string;
+  subtitle: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
+  badge: string;
+  searchPlaceholder: string;
+  filterAll: string;
+  empty: string;
+  coordinates: string;
+  rotatedLabel: string;
+  archiveLabel: string;
+}
+
+interface ArticlesPageProps {
+  articles: Article[];
+  allTags: string[];
+  locale: string;
+  strings: BlogStrings;
+}
+
+export default function ArticlesPage({ articles, allTags, locale, strings }: ArticlesPageProps) {
   const router = useRouter();
-  const allTags = useMemo(() => getAllTags(), []);
 
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -53,7 +72,7 @@ export default function ArticlesPage() {
       const matchesTag = !activeTag || a.tags.includes(activeTag);
       return matchesSearch && matchesTag;
     });
-  }, [search, activeTag]);
+  }, [search, activeTag, articles]);
 
   const latestArticle = articles[0];
 
@@ -68,7 +87,7 @@ export default function ArticlesPage() {
             className="flex min-w-0 flex-col gap-4 sm:gap-5"
           >
             <motion.div custom={0} variants={fadeInUp}>
-              <SectionLabel>{t("label")}</SectionLabel>
+              <SectionLabel>{strings.label}</SectionLabel>
             </motion.div>
 
             <motion.h1
@@ -77,10 +96,10 @@ export default function ArticlesPage() {
               className="flex flex-col leading-none"
             >
               <span className="font-sans-decorated text-[3.25rem] leading-[0.9] font-black tracking-tight text-white/92 uppercase sm:text-6xl lg:text-7xl xl:text-[4.25rem] 2xl:text-[5rem] 3xl:text-[5.6rem] 4xl:text-[6rem]">
-                {t("heading1")}
+                {strings.heading1}
               </span>
               <span className="font-sans-decorated text-royal-500 -mt-1 text-[4rem] leading-[0.86] font-black tracking-tight uppercase sm:text-7xl lg:text-8xl xl:text-[6.55rem] 2xl:text-[7.5rem] 3xl:text-[8.6rem] 4xl:text-[9.25rem]">
-                {t("heading2")}
+                {strings.heading2}
               </span>
             </motion.h1>
 
@@ -93,7 +112,7 @@ export default function ArticlesPage() {
               variants={fadeInUp}
               className="font-serif max-w-md text-sm leading-relaxed text-neutral-400 italic sm:text-base xl:max-w-lg 3xl:max-w-xl 3xl:text-lg"
             >
-              {t("subtitle")}
+              {strings.subtitle}
             </motion.p>
 
             {/* Search */}
@@ -108,7 +127,7 @@ export default function ArticlesPage() {
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder={t("searchPlaceholder")}
+                  placeholder={strings.searchPlaceholder}
                   className="w-full rounded-none border border-royal-500/30 bg-transparent py-2.5 pr-3 pl-9 text-sm text-white/90 outline-none transition-colors placeholder:text-neutral-600 focus:border-royal-500/60"
                 />
                 {search && (
@@ -130,14 +149,12 @@ export default function ArticlesPage() {
                       : "border-royal-500/20 text-royal-500/70 hover:border-royal-500/40 hover:text-royal-400"
                   }`}
                 >
-                  {t("filterAll")}
+                  {strings.filterAll}
                 </button>
                 {allTags.map((tag) => (
                   <button
                     key={tag}
-                    onClick={() =>
-                      setActiveTag(activeTag === tag ? null : tag)
-                    }
+                    onClick={() => setActiveTag(activeTag === tag ? null : tag)}
                     className={`font-mono text-2xs cursor-pointer border px-2.5 py-1 tracking-[0.12em] uppercase transition-colors ${
                       activeTag === tag
                         ? "border-royal-500/60 bg-royal-500/15 text-royal-400"
@@ -158,12 +175,12 @@ export default function ArticlesPage() {
             >
               <button
                 onClick={() =>
-                  router.push(`/${locale}/articles/${latestArticle.slug}`)
+                  latestArticle && router.push(`/${locale}/articles/${latestArticle.slug}`)
                 }
                 className="bg-royal-500 flex w-full cursor-pointer items-center justify-center gap-2.5 px-6 py-3.5 transition-all hover:bg-royal-500/85 active:scale-[0.98] sm:w-auto 3xl:px-8 3xl:py-4"
               >
                 <span className="font-sans text-xs font-bold tracking-widest text-white uppercase">
-                  {t("ctaPrimary")}
+                  {strings.ctaPrimary}
                 </span>
                 <ArrowRight className="h-4 w-4 3xl:h-5 3xl:w-5" />
               </button>
@@ -176,7 +193,7 @@ export default function ArticlesPage() {
                 className="flex w-full cursor-pointer items-center justify-center gap-2 border border-royal-500/[0.27] px-6 py-3.5 transition-colors hover:border-royal-500/50 hover:bg-white/[0.03] sm:w-auto 3xl:px-8 3xl:py-4"
               >
                 <span className="font-sans text-xs font-medium tracking-widest text-neutral-300 uppercase">
-                  {t("ctaSecondary")}
+                  {strings.ctaSecondary}
                 </span>
               </button>
             </motion.div>
@@ -189,7 +206,7 @@ export default function ArticlesPage() {
             >
               <span className="bg-royal-500 h-2 w-2 shrink-0 rounded-full" />
               <span className="text-2xs font-mono tracking-[0.12em] text-neutral-400 uppercase">
-                {t("badge")}
+                {articles.length} {strings.badge}
               </span>
             </motion.div>
           </motion.div>
@@ -212,7 +229,7 @@ export default function ArticlesPage() {
                 >
                   <FileText className="text-royal-500/40 h-8 w-8" />
                   <span className="font-mono text-sm tracking-widest text-neutral-500 uppercase">
-                    {t("empty")}
+                    {strings.empty}
                   </span>
                 </motion.div>
               ) : (
@@ -237,7 +254,7 @@ export default function ArticlesPage() {
                         </span>
                         <span className="bg-royal-500/30 h-8 w-px sm:h-10" />
                         <div className="flex h-8 w-8 items-center justify-center border border-royal-500/30 text-royal-500/80 sm:h-9 sm:w-9">
-                          {iconMap[article.icon] || <FileText className="h-4 w-4" />}
+                          {iconMap[article.icon] ?? <FileText className="h-4 w-4" />}
                         </div>
                       </div>
 
@@ -284,7 +301,7 @@ export default function ArticlesPage() {
       {/* Coordinates */}
       <div className="absolute top-24 left-8 mt-6 hidden flex-col gap-0.5 lg:left-14 lg:flex 3xl:left-20">
         <span className="text-3xs text-royal-500/40 font-mono leading-3 tracking-[0.14em] uppercase 3xl:text-2xs">
-          {t("coordinates")}
+          {strings.coordinates}
         </span>
         <span className="text-3xs text-royal-500/20 font-mono leading-3 tracking-[0.14em] uppercase 3xl:text-2xs">
           SYS_BOOT :: v2.4.1
@@ -294,7 +311,7 @@ export default function ArticlesPage() {
       {/* Archive label bottom right */}
       <div className="absolute right-8 bottom-10 hidden items-center gap-2 lg:right-14 lg:flex 3xl:right-20">
         <span className="text-2xs font-mono leading-3 tracking-[0.14em] text-neutral-600 uppercase">
-          {t("archiveLabel")}
+          {strings.archiveLabel}
         </span>
         <span className="bg-royal-500/35 block h-px w-10" />
       </div>
@@ -302,7 +319,7 @@ export default function ArticlesPage() {
       {/* Rotated label */}
       <div className="absolute top-1/2 right-8 hidden -translate-y-1/2 lg:right-14 2xl:flex 3xl:right-20">
         <span className="text-2xs text-royal-500/18 origin-center -rotate-90 font-mono leading-3 tracking-[0.14em] whitespace-nowrap uppercase">
-          {t("rotatedLabel")}
+          {strings.rotatedLabel}
         </span>
       </div>
     </section>

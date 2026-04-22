@@ -1,14 +1,13 @@
 import { notFound } from "next/navigation";
-import { getArticleBySlug, articles } from "@/lib/articles";
+import { getArticleBySlug, getRelatedArticles, getAllArticleSlugs } from "@/lib/articles";
 import { routing } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 import ArticleDetailPage from "@/components/sections/article/ArticleDetailPage";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const slugs = await getAllArticleSlugs();
   return routing.locales.flatMap((locale) =>
-    articles.map((article) => ({
-      locale,
-      slug: article.slug,
-    })),
+    slugs.map((slug) => ({ locale, slug }))
   );
 }
 
@@ -18,11 +17,40 @@ export default async function ArticlePage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const article = getArticleBySlug(slug);
+  const [article, relatedArticles, t] = await Promise.all([
+    getArticleBySlug(slug, locale),
+    (async () => {
+      const a = await getArticleBySlug(slug, locale);
+      return a ? getRelatedArticles(a.slug, a.relatedSlugs, locale) : [];
+    })(),
+    getTranslations("Article"),
+  ]);
 
   if (!article) {
     notFound();
   }
 
-  return <ArticleDetailPage article={article} locale={locale} />;
+  const articleStrings = {
+    breadcrumb: t("breadcrumb"),
+    backToBlog: t("backToBlog"),
+    shareArticle: t("shareArticle"),
+    tableOfContents: t("tableOfContents"),
+    readingProgress: t("readingProgress"),
+    section: t("section"),
+    of: t("of"),
+    minLeft: t("minLeft"),
+    author: t("author"),
+    authorName: t("authorName"),
+    authorRole: t("authorRole"),
+    related: t("related"),
+  };
+
+  return (
+    <ArticleDetailPage
+      article={article}
+      locale={locale}
+      relatedArticles={relatedArticles}
+      strings={articleStrings}
+    />
+  );
 }

@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 
@@ -6,11 +5,10 @@ interface PostHeaderProps {
   slug: string;
   title: string;
   locale: string;
+  breadcrumb: string;
 }
 
-export default async function PostHeader({ slug, title }: PostHeaderProps) {
-  const t = await getTranslations("Article");
-
+export default function PostHeader({ slug, title, breadcrumb }: PostHeaderProps) {
   const words = title.split(" ");
   const mid = Math.ceil(words.length / 2);
   const line1 = words.slice(0, mid).join(" ");
@@ -23,7 +21,7 @@ export default async function PostHeader({ slug, title }: PostHeaderProps) {
         <div className="h-1 w-1 shrink-0 bg-royal-500" />
         <div className="h-1 w-1 shrink-0 bg-royal-500" />
         <span className="font-mono text-2xs tracking-[0.18em] text-royal-500 uppercase">
-          {t("breadcrumb")}
+          {breadcrumb}
         </span>
       </div>
 

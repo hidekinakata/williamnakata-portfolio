@@ -1,47 +1,60 @@
-import { Article, getRelatedArticles } from "@/lib/articles";
-import { getTranslations } from "next-intl/server";
+import { Article } from "@/lib/articles";
 import PostHeader from "./PostHeader";
 import PostMeta from "./PostMeta";
 import ArticleContent from "./ArticleContent";
 import Sidebar from "./Sidebar";
 import ArticleEnd from "./ArticleEnd";
 
+interface ArticleDetailStrings {
+  breadcrumb: string;
+  backToBlog: string;
+  shareArticle: string;
+  tableOfContents: string;
+  readingProgress: string;
+  section: string;
+  of: string;
+  minLeft: string;
+  author: string;
+  authorName: string;
+  authorRole: string;
+  related: string;
+}
+
 interface ArticleDetailPageProps {
   article: Article;
   locale: string;
+  relatedArticles: Article[];
+  strings: ArticleDetailStrings;
 }
 
-export default async function ArticleDetailPage({ article, locale }: ArticleDetailPageProps) {
-  const t = await getTranslations("Article");
-  const relatedArticles = getRelatedArticles(article.slug, article.relatedSlugs);
-
+export default function ArticleDetailPage({ article, locale, relatedArticles, strings }: ArticleDetailPageProps) {
   const sidebarStrings = {
-    tableOfContents: t("tableOfContents"),
-    readingProgress: t("readingProgress"),
-    section: t("section"),
-    of: t("of"),
-    minLeft: t("minLeft"),
-    author: t("author"),
-    authorName: t("authorName"),
-    authorRole: t("authorRole"),
-    related: t("related"),
+    tableOfContents: strings.tableOfContents,
+    readingProgress: strings.readingProgress,
+    section: strings.section,
+    of: strings.of,
+    minLeft: strings.minLeft,
+    author: strings.author,
+    authorName: strings.authorName,
+    authorRole: strings.authorRole,
+    related: strings.related,
   };
 
-  const articleEndStrings = {
-    backToBlog: t("backToBlog"),
-    shareArticle: t("shareArticle"),
+  const endStrings = {
+    backToBlog: strings.backToBlog,
+    shareArticle: strings.shareArticle,
   };
 
   return (
     <section className="relative flex min-h-svh w-full flex-col items-center overflow-hidden pt-20 pb-16">
       <div className="relative z-10 mx-auto w-full max-w-[1520px] px-6 sm:px-8 lg:px-14 xl:px-16 3xl:max-w-[1640px] 3xl:px-20 4xl:max-w-[1780px] 4xl:px-24">
         <div className="flex flex-col gap-8">
-          <PostHeader slug={article.slug} title={article.title} locale={locale} />
+          <PostHeader slug={article.slug} title={article.title} locale={locale} breadcrumb={strings.breadcrumb} />
 
           <PostMeta date={article.date} readTime={article.readTime} tags={article.tags} />
 
           <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1">
               <ArticleContent article={article} />
             </div>
 
@@ -59,7 +72,7 @@ export default async function ArticleDetailPage({ article, locale }: ArticleDeta
           </div>
 
           <div className="pt-8">
-            <ArticleEnd locale={locale} strings={articleEndStrings} />
+            <ArticleEnd locale={locale} strings={endStrings} />
           </div>
         </div>
       </div>
