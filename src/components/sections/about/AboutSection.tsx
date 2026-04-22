@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { LucideArrowRight } from "lucide-react";
-import SectionLabel from "../shared/SectionLabel";
-import DecorativeLine from "../shared/DecorativeLine";
+import Section from "@/components/sections/shared/Section";
+import SectionTitle from "@/components/sections/shared/SectionTitle";
 
 const stats = [
   { key: "years", valueKey: "yearsValue", labelKey: "yearsLabel" },
@@ -15,20 +15,17 @@ export default function AboutSection() {
   const t = useTranslations("About");
 
   return (
-    <section className="3xl:px-28 4xl:px-40 3xl:py-32 w-full px-6 py-16 sm:px-8 lg:px-14 lg:py-24 xl:px-20">
-      <div className="3xl:gap-32 flex flex-col gap-10 lg:flex-row lg:gap-20">
-        <div className="3xl:gap-8 flex shrink-0 flex-col gap-6 lg:w-[38%]">
-          <SectionLabel>{t("label")}</SectionLabel>
-          <h2 className="font-sans-decorated 3xl:text-8xl text-5xl leading-tight font-black tracking-tight text-white/92 uppercase sm:text-6xl lg:text-7xl">
-            {t("heading")}
-          </h2>
-          <DecorativeLine />
-          <p className="3xl:text-base max-w-md font-serif text-sm leading-relaxed text-neutral-500 italic">
-            {t("subtitle")}
-          </p>
-        </div>
+    <Section>
+      <Section.ColumnLayout>
+        <Section.LeftColumn className="">
+          <SectionTitle
+            label={t("label")}
+            title1={t("heading")}
+            subtitle={t("subtitle")}
+          />
+        </Section.LeftColumn>
 
-        <div className="3xl:gap-10 flex grow flex-col gap-7 lg:gap-8">
+        <Section.RightColumn className="gap-7 lg:gap-8">
           <p className="3xl:text-lg font-sans text-sm leading-relaxed text-neutral-400 lg:text-base">
             {t("paragraph1")}
           </p>
@@ -62,8 +59,8 @@ export default function AboutSection() {
               </span>
             </button>
           </div>
-        </div>
-      </div>
-    </section>
+        </Section.RightColumn>
+      </Section.ColumnLayout>
+    </Section>
   );
 }

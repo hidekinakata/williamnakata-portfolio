@@ -5,8 +5,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import SectionLabel from "../shared/SectionLabel";
-import DecorativeLine from "../shared/DecorativeLine";
+import Section from "../shared/Section";
+import SectionTitle from "../shared/SectionTitle";
 import SectionDivider from "../shared/SectionDivider";
 
 type ExperienceRole = {
@@ -26,7 +26,7 @@ type ExperienceGroup = {
   roles: ExperienceRole[];
 };
 
-type Props = {
+type ExperienceSectionProps = {
   experiences: ExperienceGroup[];
 };
 
@@ -38,7 +38,9 @@ function formatDate(date: string | Date, locale: string): string {
   }).format(d);
 }
 
-export default function ExperienceSection({ experiences }: Props) {
+export default function ExperienceSection({
+  experiences,
+}: ExperienceSectionProps) {
   const t = useTranslations("Experience");
   const locale = useLocale();
   const [selected, setSelected] = useState<{
@@ -57,24 +59,19 @@ export default function ExperienceSection({ experiences }: Props) {
   };
 
   return (
-    <section className="3xl:px-28 4xl:px-40 3xl:py-32 w-full px-6 py-16 sm:px-8 lg:px-14 lg:py-24 xl:px-20">
+    <Section>
       <SectionDivider className="3xl:mb-32 mb-16 lg:mb-24" />
-      <div className="3xl:gap-32 flex flex-col gap-10 lg:flex-row lg:gap-20">
-        <div className="3xl:gap-8 flex min-w-0 shrink-0 flex-col gap-6 lg:w-[35%]">
-          <SectionLabel>{t("label")}</SectionLabel>
-          <h2 className="font-sans-decorated 3xl:text-8xl text-5xl leading-tight font-black tracking-tight text-white/92 uppercase sm:text-6xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
-            {t("heading1")}
-          </h2>
-          <h2 className="font-sans-decorated 3xl:text-9xl text-royal-500 -mt-2 text-5xl leading-none font-black tracking-tight uppercase sm:text-7xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
-            {t("heading2")}
-          </h2>
-          <DecorativeLine />
-          <p className="max-w-sm font-sans text-sm leading-relaxed text-neutral-500 italic">
-            {t("subtitle")}
-          </p>
-        </div>
+      <Section.ColumnLayout>
+        <Section.LeftColumn>
+          <SectionTitle
+            label={t("label")}
+            title1={t("heading1")}
+            title2={t("heading2")}
+            subtitle={t("subtitle")}
+          />
+        </Section.LeftColumn>
 
-        <div className="flex min-w-0 grow flex-col gap-0 overflow-hidden">
+        <Section.RightColumn className="gap-0 overflow-hidden">
           {experiences.map((group, ci) => (
             <div
               key={`${group.company}-${ci}`}
@@ -175,8 +172,8 @@ export default function ExperienceSection({ experiences }: Props) {
               </div>
             </div>
           ))}
-        </div>
-      </div>
+        </Section.RightColumn>
+      </Section.ColumnLayout>
 
       <DialogPrimitive.Root
         open={!!selected}
@@ -235,6 +232,6 @@ export default function ExperienceSection({ experiences }: Props) {
           )}
         </AnimatePresence>
       </DialogPrimitive.Root>
-    </section>
+    </Section>
   );
 }
