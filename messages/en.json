@@ -103,6 +103,35 @@
     "p4Desc": "High-throughput collections API built on .NET 8, handling payment processing and debt recovery workflows.",
     "p4Tags": "[\"C#\", \".NET 8\", \"EF Core\", \"SQL Server\"]"
   },
+  "Blog": {
+    "label": "Blog · Insights",
+    "heading1": "THOUGHTS",
+    "heading2": "& CODE",
+    "subtitle": "Exploring the intersection of artificial intelligence, fullstack development, and creative engineering.",
+    "ctaPrimary": "Read Latest",
+    "ctaSecondary": "All Posts",
+    "badge": "4 Articles · Updated 2026",
+    "searchPlaceholder": "Search articles...",
+    "filterAll": "All tags",
+    "empty": "No articles found.",
+    "coordinates": "23.5505° S · 46.6333° W",
+    "rotatedLabel": "Neural · Interface · Blog",
+    "archiveLabel": "Archive"
+  },
+  "Article": {
+    "breadcrumb": "Blog · Article",
+    "backToBlog": "Back to Blog",
+    "shareArticle": "Share Article",
+    "tableOfContents": "Table of Contents",
+    "readingProgress": "Reading Progress",
+    "author": "Author",
+    "authorName": "William Nakata",
+    "authorRole": "Fullstack Dev · AI Engineer",
+    "related": "Related",
+    "section": "Section",
+    "of": "of",
+    "minLeft": "min left"
+  },
   "Stack": {
     "label": "Core Stack",
     "summary1": "7 Domains",
