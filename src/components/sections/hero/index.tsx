@@ -1,13 +1,14 @@
 import { getTranslations } from "next-intl/server";
 import HeroContent from "./HeroContent";
 import { AnimatePresence } from "framer-motion";
+import Section from "../shared/Section";
 
 export default async function HeroSection() {
   const t = await getTranslations("Hero");
 
   return (
     <AnimatePresence>
-      <section className="3xl:min-h-[110svh] 3xl:pt-36 3xl:pb-36 relative flex min-h-svh w-full flex-col justify-center overflow-hidden pt-20 pb-10 sm:pt-24 sm:pb-16 lg:pt-28 lg:pb-28 xl:min-h-[108svh] xl:pt-32 xl:pb-32">
+      <Section fullHeight className="3xl:min-h-[110svh] 3xl:pt-36 3xl:pb-36">
         <div className="3xl:max-w-[1640px] 3xl:px-20 4xl:max-w-[1780px] 4xl:px-24 relative z-10 mx-auto w-full max-w-[1520px] px-6 sm:px-8 lg:px-14 xl:px-16">
           <HeroContent />
         </div>
@@ -41,7 +42,7 @@ export default async function HeroSection() {
             Neural · Interface · Design
           </span>
         </div>
-      </section>
+      </Section>
     </AnimatePresence>
   );
 }
