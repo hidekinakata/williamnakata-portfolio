@@ -137,13 +137,20 @@ function createEmptyBlock(type: ContentBlock["type"] = "paragraph"): ContentBloc
   }
 }
 
-function createEmptySection(index: number): Section {
+function createEmptySection(): Section {
   return {
     id: generateId(),
-    number: String(index + 1).padStart(2, "0"),
+    number: "",
     title: "",
     blocks: [createEmptyBlock("paragraph")],
   };
+}
+
+function renumberSections(sections: Section[]): Section[] {
+  return sections.map((s, i) => ({
+    ...s,
+    number: String(i + 1).padStart(2, "0"),
+  }));
 }
 
 const emptyForm = (): ArticleForm => ({
@@ -161,13 +168,13 @@ const emptyForm = (): ArticleForm => ({
       language: Language.pt_BR,
       title: "",
       intro: "",
-      sections: [createEmptySection(0)],
+      sections: [createEmptySection()],
     },
     {
       language: Language.en,
       title: "",
       intro: "",
-      sections: [createEmptySection(0)],
+      sections: [createEmptySection()],
     },
   ],
 });
@@ -176,29 +183,31 @@ type ArticleData = NonNullable<Awaited<ReturnType<typeof getArticleById>>>;
 
 function toForm(article: ArticleData): ArticleForm {
   const toSections = (raw: unknown): Section[] => {
-    if (!Array.isArray(raw)) return [createEmptySection(0)];
-    return raw.map((s: Record<string, unknown>, i: number) => ({
-      id: (s.id as string) || generateId(),
-      number: (s.number as string) || String(i + 1).padStart(2, "0"),
-      title: (s.title as string) || "",
-      blocks: Array.isArray(s.blocks)
-        ? (s.blocks as Record<string, unknown>[]).map((b: Record<string, unknown>) => {
-            if (b.type === "numberedList") {
-              return {
-                id: (b.id as string) || generateId(),
-                type: "numberedList" as const,
-                items: Array.isArray(b.items)
-                  ? (b.items as Record<string, unknown>[]).map((item: Record<string, unknown>) => ({
-                      number: String(item.number || ""),
-                      text: (item.text as string) || "",
-                    }))
-                  : [{ number: "1", text: "" }],
-              };
-            }
-            return { ...b, id: (b.id as string) || generateId() } as ContentBlock;
-          })
-        : [createEmptyBlock("paragraph")],
-    }));
+    if (!Array.isArray(raw)) return [createEmptySection()];
+    return renumberSections(
+      raw.map((s: Record<string, unknown>) => ({
+        id: (s.id as string) || generateId(),
+        number: "",
+        title: (s.title as string) || "",
+        blocks: Array.isArray(s.blocks)
+          ? (s.blocks as Record<string, unknown>[]).map((b: Record<string, unknown>) => {
+              if (b.type === "numberedList") {
+                return {
+                  id: (b.id as string) || generateId(),
+                  type: "numberedList" as const,
+                  items: Array.isArray(b.items)
+                    ? (b.items as Record<string, unknown>[]).map((item: Record<string, unknown>) => ({
+                        number: String(item.number || ""),
+                        text: (item.text as string) || "",
+                      }))
+                    : [{ number: "1", text: "" }],
+                };
+              }
+              return { ...b, id: (b.id as string) || generateId() } as ContentBlock;
+            })
+          : [createEmptyBlock("paragraph")],
+      })),
+    );
   };
 
   return {
@@ -219,7 +228,7 @@ function toForm(article: ArticleData): ArticleForm {
         language: lang,
         title: t?.title || "",
         intro: t?.intro || "",
-        sections: t ? toSections(t.sections) : [createEmptySection(0)],
+        sections: t ? toSections(t.sections) : [createEmptySection()],
       };
     }),
   };
@@ -481,30 +490,20 @@ function SectionEditor({
       </CardHeader>
       {expanded && (
         <CardContent className="space-y-4 pt-0">
-          <div className="grid grid-cols-[80px_1fr] gap-3">
-            <div className="space-y-1">
-              <Label className="text-xs">Número</Label>
-              <Input
-                value={section.number}
-                onChange={(e) => onChange({ ...section, number: e.target.value })}
-                placeholder="01"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Título da Seção</Label>
-              <Input
-                value={section.title}
-                onChange={(e) => {
-                  const title = e.target.value;
-                  onChange({
-                    ...section,
-                    title,
-                    id: title ? slugify(title) : generateId(),
-                  });
-                }}
-                placeholder="Título da seção"
-              />
-            </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Título da Seção</Label>
+            <Input
+              value={section.title}
+              onChange={(e) => {
+                const title = e.target.value;
+                onChange({
+                  ...section,
+                  title,
+                  id: title ? slugify(title) : generateId(),
+                });
+              }}
+              placeholder="Título da seção"
+            />
           </div>
 
           <div className="space-y-2">
@@ -661,8 +660,8 @@ export default function ArticleEditorPage({
         t.language === lang
           ? {
               ...t,
-              sections: t.sections.map((s, i) =>
-                i === sectionIdx ? section : s,
+              sections: renumberSections(
+                t.sections.map((s, i) => (i === sectionIdx ? section : s)),
               ),
             }
           : t,
@@ -677,7 +676,7 @@ export default function ArticleEditorPage({
         t.language === lang
           ? {
               ...t,
-              sections: [...t.sections, createEmptySection(t.sections.length)],
+              sections: renumberSections([...t.sections, createEmptySection()]),
             }
           : t,
       ),
@@ -691,7 +690,9 @@ export default function ArticleEditorPage({
         t.language === lang
           ? {
               ...t,
-              sections: t.sections.filter((_, i) => i !== sectionIdx),
+              sections: renumberSections(
+                t.sections.filter((_, i) => i !== sectionIdx),
+              ),
             }
           : t,
       ),
@@ -709,7 +710,7 @@ export default function ArticleEditorPage({
           sections[sectionIdx],
           sections[sectionIdx - 1],
         ];
-        return { ...t, sections };
+        return { ...t, sections: renumberSections(sections) };
       }),
     }));
   };
@@ -725,7 +726,7 @@ export default function ArticleEditorPage({
           sections[sectionIdx + 1],
           sections[sectionIdx],
         ];
-        return { ...t, sections };
+        return { ...t, sections: renumberSections(sections) };
       }),
     }));
   };
