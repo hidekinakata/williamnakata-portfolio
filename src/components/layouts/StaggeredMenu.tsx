@@ -102,7 +102,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       preLayerElsRef.current = preLayers;
 
       const offscreen = position === "left" ? -100 : 100;
-      gsap.set([panel, ...preLayers], { xPercent: offscreen, opacity: 1 });
+      gsap.set([panel, ...preLayers], { xPercent: offscreen, opacity: 1, visibility: 'visible' });
       if (preContainer) {
         gsap.set(preContainer, { xPercent: 0, opacity: 1 });
       }
@@ -452,7 +452,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       >
         <div
           ref={preLayersRef}
-          className="sm-prelayers pointer-events-none absolute top-0 right-0 bottom-0 z-[5] w-screen md:w-[clamp(400px,50vw,600px)]"
+          className="sm-prelayers pointer-events-none absolute top-0 right-0 bottom-0 z-[5] w-screen md:w-[clamp(400px,50vw,600px)] invisible"
           aria-hidden="true"
         >
           {(() => {
@@ -541,7 +541,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <aside
           id="staggered-menu-panel"
           ref={panelRef}
-          className="staggered-menu-panel bg-berwickberry-950 pointer-events-auto absolute top-0 right-0 z-10 flex h-full w-screen flex-col overflow-y-auto p-[6em_2em_2em_2em] backdrop-blur-[12px] md:w-[clamp(400px,50vw,600px)]"
+          className="staggered-menu-panel bg-berwickberry-950 pointer-events-auto absolute top-0 right-0 z-10 flex h-full w-screen flex-col overflow-y-auto p-[6em_2em_2em_2em] backdrop-blur-[12px] md:w-[clamp(400px,50vw,600px)] invisible"
           style={{ WebkitBackdropFilter: "blur(12px)" }}
           aria-hidden={!open}
         >
