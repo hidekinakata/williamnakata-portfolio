@@ -18,9 +18,9 @@ const Navbar = () => {
   const localeOptions = ["pt", "en"] as const;
 
   const socialItems = [
-    { label: "LinkedIn", link: "https://linkedin.com/in/williamhidekinakata" },
-    { label: "GitHub", link: "https://github.com/williamnakata" },
-    { label: "Instagram", link: "https://instagram.com/william.nakata" },
+    { label: "LinkedIn", link: "https://linkedin.com/in/whnakata" },
+    { label: "GitHub", link: "https://github.com/hidekinakata" },
+    { label: "Instagram", link: "https://instagram.com/hidekinakata_" },
   ];
 
   useEffect(() => {
