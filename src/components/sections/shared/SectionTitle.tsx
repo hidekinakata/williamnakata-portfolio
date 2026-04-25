@@ -5,21 +5,12 @@ import { HTMLMotionProps, motion, MotionProps, Variants } from "framer-motion";
 import SectionLabel from "./SectionLabel";
 import DecorativeLine from "./DecorativeLine";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" as const },
-  }),
-};
-
 export default function SectionTitle({
   label,
   title1,
   title2,
   subtitle,
-  variants = fadeInUp,
+  variants,
 }: {
   label: string;
   title1: string;
