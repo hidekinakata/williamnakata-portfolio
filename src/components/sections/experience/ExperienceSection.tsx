@@ -98,7 +98,7 @@ export default function ExperienceSection({
                     >
                       {group.company}
                     </span>
-                    <span className="text-3xs mt-1 font-mono leading-3 tracking-[0.18em] text-neutral-700 uppercase">
+                    <span className="text-3xs mt-1 font-mono leading-3 tracking-[0.18em] text-neutral-500 uppercase">
                       {group.roles.length === 1
                         ? "1 " + t("roleSingular")
                         : group.roles.length + " " + t("rolePlural")}
@@ -121,26 +121,26 @@ export default function ExperienceSection({
                       : "text-neutral-200";
                     const dateColor = isActive
                       ? "text-royal-400"
-                      : "text-neutral-600";
+                      : "text-neutral-500";
 
                     return (
                       <div
                         key={role.id}
                         className={`flex flex-col gap-2.5 ${!isLast ? "border-b border-white/5 pb-6" : ""} ${ri > 0 ? "mt-5" : ""}`}
                       >
-                        <div className="flex items-center justify-between gap-3">
+                        <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
                           <div className="flex min-w-0 items-center gap-2.5">
                             <span
-                              className={`size-1.5 shrink-0 rounded-full ${dotColor}`}
+                              className={`size-1 shrink-0 rounded-full ${dotColor}`}
                             />
                             <span
-                              className={`font-sans-decorated truncate text-sm leading-5 font-bold tracking-[0.02em] uppercase sm:text-base ${titleColor}`}
+                              className={`font-sans-decorated truncate text-sm leading-5 ${isActive ? "font-bold" : "font-medium"} tracking-[0.02em] uppercase sm:text-base ${titleColor}`}
                             >
                               {role.position}
                             </span>
                           </div>
                           <span
-                            className={`text-2xs shrink-0 font-mono leading-3 font-medium tracking-[0.08em] ${dateColor}`}
+                            className={`text-2xs shrink-0 pl-4 font-mono leading-3 font-medium tracking-[0.08em] ${dateColor}`}
                           >
                             {formatRange(
                               role.startDate,
