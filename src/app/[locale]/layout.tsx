@@ -85,7 +85,7 @@ export default async function RootLayout({
             />
             <Navbar />
             <SmoothScroll>
-              <PageTransition>{children}</PageTransition>
+              {children}
             </SmoothScroll>
           </AppProvider>
         </NextIntlClientProvider>

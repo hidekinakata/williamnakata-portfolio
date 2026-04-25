@@ -5,9 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "@/i18n/navigation";
 
 const variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 12 },
   enter: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -24 },
+  exit: { opacity: 0, y: -12 },
 };
 
 export default function PageTransition({ children }: { children: ReactNode }) {
