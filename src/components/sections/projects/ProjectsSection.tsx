@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import Section from "../shared/Section";
 import SectionTitle from "../shared/SectionTitle";
 import SectionDivider from "../shared/SectionDivider";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 type ProjectAccent = {
   card: string;
@@ -92,7 +94,7 @@ export default function ProjectsSection({ projects }: Props) {
             return (
               <div
                 key={project.id}
-                className={`flex flex-col gap-4 px-5 py-5 backdrop-blur-sm sm:flex-row sm:gap-6 sm:px-7 sm:py-6 ${a.card}`}
+                className={`relative flex flex-col gap-4 px-5 py-5 backdrop-blur-sm sm:flex-row sm:gap-6 sm:px-7 sm:py-6 ${a.card}`}
               >
                 <div className="flex shrink-0 flex-row items-center gap-2 sm:flex-col sm:gap-4">
                   <span
@@ -111,21 +113,35 @@ export default function ProjectsSection({ projects }: Props) {
                   className={`hidden w-px self-stretch sm:block ${a.divider}`}
                 />
 
-                <div className="flex min-w-0 grow flex-col gap-2.5">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
+                <div className="relative flex min-w-0 grow flex-col gap-2.5">
+                  <div className="flex items-center justify-between gap-3">
                     <span
                       className={`font-sans-decorated text-sm leading-5 font-bold tracking-[0.02em] uppercase sm:text-base ${a.title}`}
                     >
                       {project.title}
                     </span>
+                    <div className="flex items-center gap-3">
+                      {project.github && (
+                        <Link
+                          href={project.github}
+                          target="_blank"
+                          className={`transition-all hover:scale-110 active:scale-95 ${a.title} opacity-60 hover:opacity-100`}
+                        >
+                          <i className="devicon-github-original text-xl"></i>
+                        </Link>
+                      )}
+                      {project.link && (
+                        <Link
+                          href={project.link}
+                          target="_blank"
+                          className={`transition-all hover:scale-110 active:scale-95 ${a.title} opacity-60 hover:opacity-100`}
+                        >
+                          <ExternalLink className="h-5 w-5" />
+                        </Link>
+                      )}
+                    </div>
                   </div>
-                  {project.link && (
-                    <span
-                      className={`text-3xs self-start px-2.5 py-0.5 font-mono leading-[2.5] tracking-[0.12em] ${a.badge}`}
-                    >
-                      {project.link}
-                    </span>
-                  )}
+
                   <p className="font-serif text-xs leading-relaxed text-neutral-500 italic">
                     {project.description}
                   </p>
