@@ -5,18 +5,27 @@ import { HTMLMotionProps, motion, MotionProps, Variants } from "framer-motion";
 import SectionLabel from "./SectionLabel";
 import DecorativeLine from "./DecorativeLine";
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" as const },
+  }),
+};
+
 export default function SectionTitle({
   label,
   title1,
   title2,
   subtitle,
-  variants,
+  variants = fadeInUp,
 }: {
   label: string;
   title1: string;
-  title2: string;
+  title2?: string;
   subtitle: string;
-  variants: Variants;
+  variants?: Variants;
 }) {
   const textRef1 = useRef<SVGTextElement>(null);
   const [viewBox1, setViewBox1] = useState("0 0 1000 120");
@@ -40,7 +49,7 @@ export default function SectionTitle({
   }, [title1]);
 
   useEffect(() => {
-    if (textRef2.current) {
+    if (textRef2.current && title2) {
       const bbox = textRef2.current.getBBox();
       const style = window.getComputedStyle(textRef2.current);
       const canvas = document.createElement("canvas");
@@ -69,7 +78,7 @@ export default function SectionTitle({
           viewBox={viewBox1}
           preserveAspectRatio="xMinYMid meet"
           width="100%"
-          className="mb-4 w-[70%] text-white/92"
+          className={`w-[70%] text-white/92 ${title2 ? "mb-4" : ""}`}
         >
           <text
             ref={textRef1}
@@ -80,22 +89,24 @@ export default function SectionTitle({
             {title1}
           </text>
         </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox={viewBox2}
-          preserveAspectRatio="xMinYMid meet"
-          width="100%"
-          className="text-royal-500"
-        >
-          <text
-            ref={textRef2}
-            dominantBaseline="auto"
-            fill="currentColor"
-            fontWeight="900"
+        {title2 && (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox={viewBox2}
+            preserveAspectRatio="xMinYMid meet"
+            width="100%"
+            className="text-royal-500"
           >
-            {title2}
-          </text>
-        </svg>
+            <text
+              ref={textRef2}
+              dominantBaseline="auto"
+              fill="currentColor"
+              fontWeight="900"
+            >
+              {title2}
+            </text>
+          </svg>
+        )}
       </motion.h1>
       <motion.div custom={2} variants={variants}>
         <DecorativeLine width="max-w-26 lg:max-w-80" />
