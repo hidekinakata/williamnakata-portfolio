@@ -5,7 +5,9 @@
     "Experience": "Experiência",
     "Projects": "Projetos",
     "Contact": "Contato",
-    "Blog": "Artigos"
+    "Blog": "Artigos",
+    "open": "Menu",
+    "close": "Fechar"
   },
   "Hero": {
     "badge": "Portfólio",
