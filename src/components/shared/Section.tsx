@@ -20,7 +20,7 @@ export default function Section({
         "relative w-full overflow-hidden",
         fullHeight
           ? "flex min-h-svh flex-col justify-center pt-28 pb-12 sm:pt-32 sm:pb-20 lg:pt-28 lg:pb-28 xl:min-h-[108svh] xl:pt-32 xl:pb-32"
-          : "3xl:px-28 4xl:px-40 3xl:py-32 px-6 py-16 sm:px-8 lg:px-14 lg:py-24 xl:px-20",
+          : "3xl:py-32 py-16 lg:py-24",
         className,
       )}
     >
