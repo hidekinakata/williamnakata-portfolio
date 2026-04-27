@@ -7,6 +7,7 @@ import Navbar from "@/components/layouts/Navbar";
 import SmoothScroll from "@/components/layouts/SmoothScroll";
 import Grainient from "@/components/shared/effects/Grainient";
 import { AppProvider } from "@/context/AppContext";
+import { getProfile } from "@/lib/data";
 import { routing } from "@/i18n/routing";
 
 export const metadata: Metadata = {
@@ -30,6 +31,7 @@ export default async function RootLayout({
   const theme = cookieStore.get("theme")?.value || "system";
   const themeprod = theme === "dark" ? "dark" : "";
   const messages = await getMessages();
+  const profile = await getProfile();
 
   return (
     <html lang={locale} className={themeprod} suppressHydrationWarning>
@@ -82,7 +84,7 @@ export default async function RootLayout({
               centerY={0}
               zoom={2.2}
             />
-            <Navbar />
+            <Navbar profile={profile} />
             <SmoothScroll>
               {children}
             </SmoothScroll>

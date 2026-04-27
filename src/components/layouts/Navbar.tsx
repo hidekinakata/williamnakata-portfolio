@@ -7,7 +7,17 @@ import { cn } from "@/lib/utils";
 import { Link, usePathname } from "@/i18n/navigation";
 import StaggeredMenu from "./StaggeredMenu";
 
-const Navbar = () => {
+interface NavbarProps {
+  profile?: {
+    name: string;
+    email: string;
+    github: string;
+    linkedin: string;
+    instagram: string;
+  } | null;
+}
+
+const Navbar = ({ profile }: NavbarProps) => {
   const t = useTranslations("Menu");
   const tHero = useTranslations("Hero");
   const locale = useLocale();
@@ -18,9 +28,9 @@ const Navbar = () => {
   const localeOptions = ["pt", "en"] as const;
 
   const socialItems = [
-    { label: "LinkedIn", link: "https://linkedin.com/in/whnakata" },
-    { label: "GitHub", link: "https://github.com/hidekinakata" },
-    { label: "Instagram", link: "https://instagram.com/hidekinakata_" },
+    ...(profile?.linkedin ? [{ label: "LinkedIn", link: profile.linkedin }] : []),
+    ...(profile?.github ? [{ label: "GitHub", link: profile.github }] : []),
+    ...(profile?.instagram ? [{ label: "Instagram", link: profile.instagram }] : []),
   ];
 
   useEffect(() => {

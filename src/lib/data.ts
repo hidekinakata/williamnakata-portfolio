@@ -80,6 +80,22 @@ export async function getExperiences(
   });
 }
 
+export async function getProfile() {
+  const profile = await prisma.profile.findFirst({
+    include: { translations: true },
+  });
+
+  if (!profile) return null;
+
+  return {
+    name: profile.name,
+    email: profile.email || "",
+    github: profile.github || "",
+    linkedin: profile.linkedin || "",
+    instagram: profile.instagram || "",
+  };
+}
+
 export async function getProjects(locale: string) {
   const language = mapLocale(locale);
   const projects = await prisma.project.findMany({
