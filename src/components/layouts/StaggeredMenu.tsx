@@ -439,7 +439,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       className={cn(
         "sm-scope z-40",
         isFixed
-          ? "fixed top-0 left-0 h-screen w-screen overflow-hidden"
+          ? "pointer-events-none fixed top-0 left-0 h-screen w-screen overflow-hidden"
           : "h-full w-full",
         className,
       )}
@@ -541,7 +541,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <aside
           id="staggered-menu-panel"
           ref={panelRef}
-          className="staggered-menu-panel bg-berwickberry-950 pointer-events-auto absolute top-0 right-0 z-10 flex h-full w-screen flex-col overflow-y-auto p-[6em_2em_2em_2em] backdrop-blur-[12px] md:w-[clamp(400px,50vw,600px)] invisible"
+          className={cn(
+            "staggered-menu-panel bg-berwickberry-950 absolute top-0 right-0 z-10 flex h-full w-screen flex-col overflow-y-auto p-[6em_2em_2em_2em] backdrop-blur-[12px] md:w-[clamp(400px,50vw,600px)] invisible",
+            open ? "pointer-events-auto" : "pointer-events-none"
+          )}
           style={{ WebkitBackdropFilter: "blur(12px)" }}
           aria-hidden={!open}
         >
