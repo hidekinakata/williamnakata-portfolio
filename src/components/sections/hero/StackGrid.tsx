@@ -89,7 +89,7 @@ export default function StackGrid() {
       </div>
 
       {/* Grid 2 colunas — mobile e desktop */}
-      <div className="3xl:gap-4 grid grid-cols-2 gap-2.5 sm:gap-3">
+      <div className="3xl:gap-4 grid grid-cols-2 grid-rows-4 gap-2.5 sm:gap-3">
         {cardData.map((card) => {
           const c = card.color;
           return (
@@ -141,7 +141,7 @@ export default function StackGrid() {
                   (tag: string) => (
                     <span
                       key={tag}
-                      className="text-3xs 3xl:text-2xs px-1.5 py-0.5 font-mono leading-[2.5]"
+                      className="text-3xs 3xl:text-2xs flex-5/12 px-1.5 py-0.5 text-center font-mono leading-[2.5] text-nowrap xl:flex-none"
                       style={{
                         backgroundColor: `${c}15`,
                         border: `1px solid ${c}30`,
