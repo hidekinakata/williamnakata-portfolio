@@ -2,8 +2,8 @@
 
 import { LucideArrowRight, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
-import SectionLabel from "../shared/SectionLabel";
-import DecorativeLine from "../shared/DecorativeLine";
+import SectionLabel from "@/components/shared/SectionLabel";
+import DecorativeLine from "@/components/shared/DecorativeLine";
 import StackGrid from "./StackGrid";
 import { motion } from "framer-motion";
 

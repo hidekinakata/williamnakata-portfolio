@@ -1,9 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import Section from "../shared/Section";
-import SectionTitle from "../shared/SectionTitle";
-import SectionDivider from "../shared/SectionDivider";
+import Section from "@/components/shared/Section";
+import SectionTitle from "@/components/shared/SectionTitle";
+import SectionDivider from "@/components/shared/SectionDivider";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 

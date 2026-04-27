@@ -4,9 +4,8 @@ import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import Navbar from "@/components/layouts/Navbar";
-import PageTransition from "@/components/layouts/PageTransition";
 import SmoothScroll from "@/components/layouts/SmoothScroll";
-import Grainient from "@/components/effects/Grainient";
+import Grainient from "@/components/shared/effects/Grainient";
 import { AppProvider } from "@/context/AppContext";
 import { routing } from "@/i18n/routing";
 

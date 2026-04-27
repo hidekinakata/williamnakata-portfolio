@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { LucideArrowRight } from "lucide-react";
-import Section from "@/components/sections/shared/Section";
-import SectionTitle from "@/components/sections/shared/SectionTitle";
+import Section from "@/components/shared/Section";
+import SectionTitle from "@/components/shared/SectionTitle";
 
 const stats = [
   { key: "years", valueKey: "yearsValue", labelKey: "yearsLabel" },

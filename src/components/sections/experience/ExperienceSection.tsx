@@ -5,9 +5,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import Section from "../shared/Section";
-import SectionTitle from "../shared/SectionTitle";
-import SectionDivider from "../shared/SectionDivider";
+import Section from "@/components/shared/Section";
+import SectionTitle from "@/components/shared/SectionTitle";
+import SectionDivider from "@/components/shared/SectionDivider";
 
 type ExperienceRole = {
   id: string;

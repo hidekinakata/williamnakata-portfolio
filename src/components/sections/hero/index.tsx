@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import HeroContent from "./HeroContent";
-import Section from "../shared/Section";
+import Section from "@/components/shared/Section";
 
 export default async function HeroSection() {
   const t = await getTranslations("Hero");

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import GradualBlur from "@/components/effects/GradualBlur";
+import GradualBlur from "@/components/shared/effects/GradualBlur";
 import { cn } from "@/lib/utils";
 import { Link, usePathname } from "@/i18n/navigation";
 import StaggeredMenu from "./StaggeredMenu";
