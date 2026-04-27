@@ -42,12 +42,12 @@ export default function HeroContent() {
   const t = useTranslations("Hero");
 
   return (
-    <div className="3xl:gap-20 flex flex-col gap-8 sm:gap-10 xl:grid xl:grid-cols-[1fr_auto] xl:items-center xl:justify-between xl:gap-10 2xl:gap-14">
+    <div className="3xl:gap-20 flex flex-col gap-16 sm:gap-20 xl:grid xl:grid-cols-[1fr_auto] xl:items-center xl:justify-between xl:gap-10 2xl:gap-14">
       {/* ── LEFT COLUMN ── */}
       <motion.div
         initial="hidden"
         animate="visible"
-        className="3xl:gap-6 flex min-w-0 flex-col gap-3 sm:gap-4"
+        className="3xl:gap-6 flex min-w-0 flex-col gap-6 sm:gap-8"
       >
         <motion.div
           custom={0}
@@ -130,7 +130,7 @@ export default function HeroContent() {
         <motion.div
           custom={5}
           variants={fadeInUp}
-          className="flex flex-col items-stretch gap-3 pt-1 sm:flex-row sm:items-center"
+          className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row sm:items-center"
         >
           <button className="bg-royal-500 3xl:px-8 3xl:py-4 hover:bg-royal-500/85 flex w-full cursor-pointer items-center justify-center gap-2.5 px-6 py-3.5 transition-all active:scale-[0.98] sm:w-auto">
             <span className="font-sans text-xs font-bold tracking-widest text-white uppercase">
