@@ -40,6 +40,7 @@ const fadeInUp2 = {
 
 export default function HeroContent() {
   const t = useTranslations("Hero");
+  const currentYear = new Date().getFullYear();
 
   return (
     <div className="3xl:gap-20 flex flex-col gap-16 sm:gap-20 xl:grid xl:grid-cols-[1fr_auto] xl:items-center xl:justify-between xl:gap-10 2xl:gap-14">
@@ -56,7 +57,7 @@ export default function HeroContent() {
         >
           <SectionLabel>{t("badge")}</SectionLabel>
           <span className="text-3xs 3xl:text-xs text-royal-500/80 font-mono leading-3 tracking-[0.14em] uppercase">
-            · 2025
+            · {currentYear}
           </span>
         </motion.div>
 
