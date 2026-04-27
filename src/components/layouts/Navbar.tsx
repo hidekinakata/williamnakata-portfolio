@@ -14,6 +14,7 @@ interface NavbarProps {
     github: string;
     linkedin: string;
     instagram: string;
+    cvUrl: string;
   } | null;
 }
 
@@ -147,7 +148,9 @@ const Navbar = ({ profile }: NavbarProps) => {
 
           {/* Download CV */}
           <a
-            href="#"
+            href={profile?.cvUrl || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-2 border border-violet-500/45 bg-violet-400/10 px-4 py-2 transition-colors hover:border-violet-500/70 hover:bg-violet-400/15"
           >
             <span className="text-2xs/3 font-mono font-medium tracking-[0.2em] text-violet-400 uppercase">
@@ -201,7 +204,9 @@ const Navbar = ({ profile }: NavbarProps) => {
                 </div>
               </div>
               <a
-                href="#"
+                href={profile?.cvUrl || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex w-full items-center justify-center gap-2 border border-white/10 bg-white/5 px-4 py-4 transition-colors hover:bg-white/10"
               >
                 <span className="text-2xs font-mono font-medium tracking-[0.2em] text-white uppercase">

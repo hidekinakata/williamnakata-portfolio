@@ -31,7 +31,7 @@ export default async function RootLayout({
   const theme = cookieStore.get("theme")?.value || "system";
   const themeprod = theme === "dark" ? "dark" : "";
   const messages = await getMessages();
-  const profile = await getProfile();
+  const profile = await getProfile(locale);
 
   return (
     <html lang={locale} className={themeprod} suppressHydrationWarning>

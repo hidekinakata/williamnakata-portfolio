@@ -80,12 +80,15 @@ export async function getExperiences(
   });
 }
 
-export async function getProfile() {
+export async function getProfile(locale: string) {
+  const language = mapLocale(locale);
   const profile = await prisma.profile.findFirst({
-    include: { translations: true },
+    include: { translations: { where: { language } } },
   });
 
   if (!profile) return null;
+
+  const translation = profile.translations[0];
 
   return {
     name: profile.name,
@@ -93,6 +96,7 @@ export async function getProfile() {
     github: profile.github || "",
     linkedin: profile.linkedin || "",
     instagram: profile.instagram || "",
+    cvUrl: translation?.cvUrl || "",
   };
 }
 
