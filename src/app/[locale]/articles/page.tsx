@@ -1,5 +1,5 @@
 import { getArticles, getAllTags } from "@/lib/articles";
-import ArticlesPage from "@/components/sections/articles/ArticlesPage";
+import ArticlesPage from "@/components/views/ArticlesPage";
 import { getTranslations } from "next-intl/server";
 
 export default async function BlogPage({

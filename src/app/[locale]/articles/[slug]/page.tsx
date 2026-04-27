@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getArticleBySlug, getRelatedArticles, getAllArticleSlugs } from "@/lib/articles";
 import { routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
-import ArticleDetailPage from "@/components/sections/article/ArticleDetailPage";
+import ArticleDetailPage from "@/components/views/ArticleDetailPage";
 
 export async function generateStaticParams() {
   const slugs = await getAllArticleSlugs();

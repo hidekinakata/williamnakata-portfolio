@@ -1,9 +1,9 @@
 import { Article } from "@/lib/articles";
-import PostHeader from "./PostHeader";
-import PostMeta from "./PostMeta";
-import ArticleContent from "./ArticleContent";
-import Sidebar from "./Sidebar";
-import ArticleEnd from "./ArticleEnd";
+import PostHeader from "@/components/article/PostHeader";
+import PostMeta from "@/components/article/PostMeta";
+import ArticleContent from "@/components/article/ArticleContent";
+import Sidebar from "@/components/article/Sidebar";
+import ArticleEnd from "@/components/article/ArticleEnd";
 
 interface ArticleDetailStrings {
   breadcrumb: string;
@@ -72,7 +72,7 @@ export default function ArticleDetailPage({ article, locale, relatedArticles, st
           </div>
 
           <div className="pt-8">
-            <ArticleEnd locale={locale} strings={endStrings} />
+            <ArticleEnd strings={endStrings} />
           </div>
         </div>
       </div>
