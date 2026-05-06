@@ -185,6 +185,32 @@ function toForm(article: ArticleData): ArticleForm {
               return { ...b, id: (b.id as string) || generateId() } as ContentBlock;
             })
           : [createEmptyBlock("paragraph")],
+        subsections: s.subsections
+          ? renumberSections(
+              (s.subsections as Record<string, unknown>[]).map((sub: Record<string, unknown>) => ({
+                id: (sub.id as string) || generateId(),
+                number: "",
+                title: (sub.title as string) || "",
+                blocks: Array.isArray(sub.blocks)
+                  ? (sub.blocks as Record<string, unknown>[]).map((b: Record<string, unknown>) => {
+                      if (b.type === "numberedList") {
+                        return {
+                          id: (b.id as string) || generateId(),
+                          type: "numberedList" as const,
+                          items: Array.isArray(b.items)
+                            ? (b.items as Record<string, unknown>[]).map((item: Record<string, unknown>) => ({
+                                number: String(item.number || ""),
+                                text: (item.text as string) || "",
+                              }))
+                            : [{ number: "1", text: "" }],
+                        };
+                      }
+                      return { ...b, id: (b.id as string) || generateId() } as ContentBlock;
+                    })
+                  : [createEmptyBlock("paragraph")],
+              })),
+            )
+          : undefined,
       })),
     );
   };

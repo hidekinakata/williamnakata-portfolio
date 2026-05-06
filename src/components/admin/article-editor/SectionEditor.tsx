@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -40,6 +40,13 @@ export default function SectionEditor({
   isSubSection = false,
 }: SectionEditorProps) {
   const [expanded, setExpanded] = useState(true);
+  const [titleInput, setTitleInput] = useState(section.title);
+  const [idInput, setIdInput] = useState(section.id);
+
+  useEffect(() => {
+    setTitleInput(section.title);
+    setIdInput(section.id);
+  }, [section.title, section.id]);
 
   const handleAddSubSection = () => {
     onChange({
@@ -130,9 +137,13 @@ export default function SectionEditor({
           <div className="space-y-1">
             <Label className="text-xs">Título da {isSubSection ? "Subseção" : "Seção"}</Label>
             <Input
-              value={section.title}
+              value={titleInput}
               onChange={(e) => {
-                const title = e.target.value;
+                e.stopPropagation();
+                setTitleInput(e.target.value);
+              }}
+              onBlur={() => {
+                const title = titleInput;
                 onChange({
                   ...section,
                   title,
@@ -146,8 +157,14 @@ export default function SectionEditor({
           <div className="space-y-2">
             <Label className="text-xs">ID</Label>
             <Input
-              value={section.id}
-              onChange={(e) => onChange({ ...section, id: e.target.value })}
+              value={idInput}
+              onChange={(e) => {
+                e.stopPropagation();
+                setIdInput(e.target.value);
+              }}
+              onBlur={() => {
+                onChange({ ...section, id: idInput });
+              }}
               placeholder="identificador"
               className="font-mono text-sm"
             />

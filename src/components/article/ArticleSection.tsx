@@ -43,9 +43,15 @@ export default function ArticleSection({ section, isSubSection = false }: Articl
           {section.number}
         </span>
         <div className="h-6 w-px bg-white/10" />
-        <h2 className={`font-sans-decorated font-bold tracking-tight text-white/92 ${isSubSection ? "text-lg sm:text-xl lg:text-[24px]" : "text-xl sm:text-2xl lg:text-[28px]"}`}>
-          {section.title}
-        </h2>
+        {isSubSection ? (
+          <h3 className="font-sans-decorated font-bold tracking-tight text-white/92 text-lg sm:text-xl lg:text-[24px]">
+            {section.title}
+          </h3>
+        ) : (
+          <h2 className="font-sans-decorated font-bold tracking-tight text-white/92 text-xl sm:text-2xl lg:text-[28px]">
+            {section.title}
+          </h2>
+        )}
       </div>
 
       <div className="flex flex-col gap-6">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useLayoutEffect, useRef, useCallback } from "react";
+import { useState, useLayoutEffect, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FileText, LayoutTemplate } from "lucide-react";
@@ -31,7 +31,11 @@ export default function SplitScreenEditor({
   const isSyncingRef = useRef(false);
 
   useLayoutEffect(() => {
-    if (syncedRef.current === value) return;
+    if (syncedRef.current === value) {
+      isSyncingRef.current = false;
+      return;
+    }
+    if (isSyncingRef.current) return;
     queueMicrotask(() => {
       setSections(value);
       setMarkdown(sectionsToMarkdown(value));
